@@ -1,4 +1,5 @@
 import Category from "../models/Category"
+import Product from "../models/Product";
 
 export const createCategory = async (req, res) => {
     try {
@@ -45,6 +46,7 @@ export const getAllCategory = async (req, res) => {
 
 export const getOneCategory = async (req, res) => {
     try {
+        const product = await Product.find({ category: req.params.id});
         const data = await Category.findById(req.params.id)
         if(!data){
             return res.status(404).json({
@@ -54,6 +56,7 @@ export const getOneCategory = async (req, res) => {
         return res.status(200).json({
             message: "Successfully!",
             data,
+            product
         });
     } catch (error) {
         return res.status(500).json({
