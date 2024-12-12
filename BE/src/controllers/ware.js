@@ -1,15 +1,8 @@
-import Product from "../models/Product"
 import Ware from "../models/Ware";
 
-export const createProduct = async (req, res) => {
+export const createWareHouse = async (req, res) => {
     try {
-        const {wareHouse }= req.body
-        const warehouseData = await Ware.findById(wareHouse);
-        if (!warehouseData) {
-            return res.status(404).json({ message: "Warehouse not found!" });
-        }
-
-        const data = await Product.create({...req.body, wareHouse} );
+        const data = await Ware.create(req.body);
         if (!data) {
             return res.status(404).json({
               message: "Create failed!",
@@ -28,55 +21,34 @@ export const createProduct = async (req, res) => {
     
 }
 
-export const getAllProducts = async (req, res) => {
-    try {
-        const data = await Product.find({})
-        if (!data) {
-            return res.status(404).json({
-              message: "No Products!",
-            });
-        }
-        return res.status(200).json({
-            message: "Successfully!",
-            data,
-        });   
-    } catch (error) {
-        return res.status(500).json({
-            name: error.name || "Error",
-            message: error.message || "Server error",
-        });
-    }
-}
 
-export const getOneProduct = async (req, res) => {
+export const getAllWareHouse = async (req, res) => {
     try {
-        const products = await Product.find().populate("warehouse", "name unit countInStock");
-
-        const data = await Product.findById(req.params.id)
-        if (!data) {
-            return res.status(404).json({
-              message: "No Products!",
-              products
-            });
-        }
-        return res.status(200).json({
-            message: "Successfully!",
-            data,
-        });   
-    } catch (error) {
-        return res.status(500).json({
-            name: error.name || "Error",
-            message: error.message || "Server error",
-        });
-    }
-}
-
-export const updateProduct = async (req, res) => {
-    try {
-        const data = await Product.findByIdAndUpdate({ _id: req.params.id}, req.body, { new: true })
+        const data = await Ware.find({})
         if(!data){
             return res.status(404).json({
-              message: "Update Product failed!",
+              message: "Get All WareHouse failed!",
+            });
+          }
+
+        return res.status(200).json({
+            message: "Successfully!",
+            data,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            name: error.name || "Error",
+            message: error.message || "Server error",
+        });
+    }
+}
+
+export const getOneWareHouse = async (req, res) => {
+    try {
+        const data = await Ware.findById(req.params.id)
+        if(!data){
+            return res.status(404).json({
+              message: "Get One WareHouse failed!",
             });
           }
         return res.status(200).json({
@@ -91,12 +63,34 @@ export const updateProduct = async (req, res) => {
     }
 }
 
-export const removeProduct = async (req, res) => {
+
+
+export const updateWareHouse = async (req, res) => {
     try {
-        const data = await Product.findByIdAndDelete({ _id: req.params.id})
+        const data = await Ware.findByIdAndUpdate({ _id: req.params.id}, req.body, { new: true })
         if(!data){
             return res.status(404).json({
-              message: "Delete Product failed!",
+              message: "Update WareHouse failed!",
+            });
+          }
+        return res.status(200).json({
+            message: "Successfully!",
+            data,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            name: error.name || "Error",
+            message: error.message || "Server error",
+        });
+    }
+}
+
+export const removeWareHouse = async (req, res) => {
+    try {
+        const data = await Ware.findByIdAndDelete({ _id: req.params.id})
+        if(!data){
+            return res.status(404).json({
+              message: "Delete WareHouse failed!",
             });
           }
         return res.status(200).json({
