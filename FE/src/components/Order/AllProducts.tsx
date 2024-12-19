@@ -1,21 +1,31 @@
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
 import { Coffee } from '../../upload'
 
-const AllProducts = () => {
+const MenuAll = () => {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['CATEGORIES'],
+    queryFn: async () => {
+      const res = await axios.get('http://localhost:8000/api/categories')
+      return res.data.data
+    }
+  })
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error fetching data</div>;
   return (
     <div>
        <div className="grid grid-cols-[60%,1fr] p-6 gap-10">
           <div className="">
             {/* Nav Categories */}
-            <div className="p-4">
-              <button className='text-white p-4 bg-gray-300 mx-4 rounded-xl text-black font-semibold hover:bg-red-400 hover:text-white'>Tất Cả</button>
-              <button className='text-white p-4 bg-gray-300 mx-4 rounded-xl text-black font-semibold hover:bg-red-400 hover:text-white'>Trà</button>
-              <button className='text-white p-4 bg-gray-300 mx-4 rounded-xl text-black font-semibold hover:bg-red-400 hover:text-white'>Cà Phê</button>
-              <button className='text-white p-4 bg-gray-300 mx-4 rounded-xl text-black font-semibold hover:bg-red-400 hover:text-white'>Nước Ép</button>
-              <button className='text-white p-4 bg-gray-300 mx-4 rounded-xl text-black font-semibold hover:bg-red-400 hover:text-white'>Bánh</button>
-            </div>
+              <div className="p-4">
+                {data.map((item: any,index: number) => (
+                <button className='text-white p-4 bg-gray-300 mx-4 rounded-xl text-black font-semibold hover:bg-red-400 hover:text-white'>{item.name}</button>
+                
+              ))}
+              </div>
             
             {/* Products */}
             <div className="grid grid-cols-3 gap-4">
@@ -123,4 +133,4 @@ const AllProducts = () => {
   )
 }
 
-export default AllProducts
+export default MenuAll

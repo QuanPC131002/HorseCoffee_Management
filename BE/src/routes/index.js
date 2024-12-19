@@ -6,7 +6,7 @@ import authRouter from "./auth";
 
 const router = Router();
 
-router.use("/category", categoryRouter)
+router.use("/categories", categoryRouter)
 router.use("/product", productRouter )
 router.use("/ware", wareRouter )
 router.use("/auth", authRouter)
