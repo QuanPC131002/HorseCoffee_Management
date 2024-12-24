@@ -3,25 +3,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useQuery } from '@tanstack/react-query'
 import instance from '../../config/axios'
 import { Coffee } from '../../upload'
+import { useCategories } from '../../hook/category/useCategories'
+import { useProduct } from '../../hook/product/useProduct'
 
 const MenuAll = () => {
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['CATEGORIES'],
-    queryFn: async () => {
-      const res = await instance.get('/categories')
-      return res.data.data
-    }
-  })
-
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error fetching data</div>;
+  const { data:categries } = useCategories()
+  const { data:products } = useProduct()
   return (
     <div>
        <div className="grid grid-cols-[60%,1fr] p-6 gap-10">
           <div className="">
             {/* Nav Categories */}
               <div className="p-4">
-                {data.map((item: any,index: number) => (
+                {categries.map((item: any,index: number) => (
                 <button className='text-white p-4 bg-gray-300 mx-4 rounded-xl text-black font-semibold hover:bg-red-400 hover:text-white'>{item.name}</button>
                 
               ))}
@@ -29,54 +23,26 @@ const MenuAll = () => {
             
             {/* Products */}
             <div className="grid grid-cols-3 gap-4">
+            {products.map((item: any) => (
+
             <div className="bg-white p-1">
+              <img src={item.image} alt="" className='w-full'/>
+             <div className="flex justify-between my-1">
+              <p>{item.name}</p>
+              <span className='text-red-700'>{item.price}vnd</span>
+             </div>
+            <button className='bg-red-500 w-full rounded-lg p-1 text-white hover:bg-gray-400'>Thêm</button>
+            </div>
+            ))}
+            {/* <div className="bg-white p-1">
               <img src={Coffee} alt="" className='w-full'/>
              <div className="flex justify-between my-1">
               <p>Capuchino</p>
               <span className='text-red-700'>50.000đ</span>
              </div>
             <button className='bg-red-500 w-full rounded-lg p-1 text-white hover:bg-gray-400'>Thêm</button>
-            </div>
-            <div className="bg-white p-1">
-              <img src={Coffee} alt="" className='w-full'/>
-             <div className="flex justify-between my-1">
-              <p>Capuchino</p>
-              <span className='text-red-700'>50.000đ</span>
-             </div>
-            <button className='bg-red-500 w-full rounded-lg p-1 text-white hover:bg-gray-400'>Thêm</button>
-            </div>
-            <div className="bg-white p-1">
-              <img src={Coffee} alt="" className='w-full'/>
-             <div className="flex justify-between my-1">
-              <p>Capuchino</p>
-              <span className='text-red-700'>50.000đ</span>
-             </div>
-            <button className='bg-red-500 w-full rounded-lg p-1 text-white hover:bg-gray-400'>Thêm</button>
-            </div>
-            <div className="bg-white p-1">
-              <img src={Coffee} alt="" className='w-full'/>
-             <div className="flex justify-between my-1">
-              <p>Capuchino</p>
-              <span className='text-red-700'>50.000đ</span>
-             </div>
-            <button className='bg-red-500 w-full rounded-lg p-1 text-white hover:bg-gray-400'>Thêm</button>
-            </div>
-            <div className="bg-white p-1">
-              <img src={Coffee} alt="" className='w-full'/>
-             <div className="flex justify-between my-1">
-              <p>Capuchino</p>
-              <span className='text-red-700'>50.000đ</span>
-             </div>
-            <button className='bg-red-500 w-full rounded-lg p-1 text-white hover:bg-gray-400'>Thêm</button>
-            </div>
-            <div className="bg-white p-1">
-              <img src={Coffee} alt="" className='w-full'/>
-             <div className="flex justify-between my-1">
-              <p>Capuchino</p>
-              <span className='text-red-700'>50.000đ</span>
-             </div>
-            <button className='bg-red-500 w-full rounded-lg p-1 text-white hover:bg-gray-400'>Thêm</button>
-            </div>
+            </div> */}
+            
           </div>
           </div>
           
