@@ -5,6 +5,9 @@ import LayoutAdmin from "../layout/Admin"
 import CategoryAdd from "../components/Category/CategoryAdd"
 import CategoryList from "../components/Category/CategoryList"
 import CategoryEdit from "../components/Category/CategoryEdit"
+import WareList from "../components/WareHouse/WareList"
+import WareAdd from "../components/WareHouse/WareAdd"
+import WareEdit from "../components/WareHouse/WareEdit"
 const IndexRouter = () => {
   return (
     <div>
@@ -16,6 +19,11 @@ const IndexRouter = () => {
             <Route index element={<CategoryList />} />
             <Route path="add" element={<CategoryAdd />} />
             <Route path="edit/:id" element={<CategoryEdit />} />
+          </Route>
+          <Route path='ware'>
+            <Route index element={<WareList />} />
+            <Route path="add" element={<WareAdd />} />
+            <Route path="edit/:id" element={<WareEdit />} />
           </Route>
         </Route>
       </Routes>

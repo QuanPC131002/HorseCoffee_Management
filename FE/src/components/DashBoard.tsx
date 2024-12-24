@@ -22,7 +22,7 @@ const DashBoard = () => {
             <Link to='/categories'><FontAwesomeIcon icon={faFolder} className='h-[30px]'/></Link>
           </div>
           <div className="p-4 text-center my-10">
-            <Link to='/'><FontAwesomeIcon icon={faUser} className='h-[30px]'/></Link>
+            <Link to='/ware'><FontAwesomeIcon icon={faUser} className='h-[30px]'/></Link>
           </div>
           <div className="p-4 text-center my-20">
             <FontAwesomeIcon icon={faRightFromBracket} className='h-[30px]'/>

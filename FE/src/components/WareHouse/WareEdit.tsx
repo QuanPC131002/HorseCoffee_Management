@@ -4,7 +4,7 @@ import React from 'react'
 import {useForm} from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import instance from '../../config/axios'
-const CategoryEdit = () => {
+const WareEdit = () => {
     const { id } = useParams()
     const navigate = useNavigate()
     const { 
@@ -15,26 +15,26 @@ const CategoryEdit = () => {
     } = useForm()
 
     const {data} = useQuery({
-        queryKey: ['CATEGORIES_EDIT', id],
+        queryKey: ['Ware_EDIT', id],
         queryFn: async () => {
-            const res = await instance.get(`/categories/${id}`)
+            const res = await instance.get(`/ware/${id}`)
             reset(res.data.data)
             return res.data.data
         }
     })
     const mutation = useMutation({
-        mutationFn: async (cate: any) => {
-            const res = await instance.put(`/categories/${cate._id}`, cate)
+        mutationFn: async (ware: any) => {
+            const res = await instance.put(`/ware/${ware._id}`, ware)
             return res.data
         },
         onSuccess: () => {
             alert("Cập nhật thành công!"),
-            navigate('/categories')
+            navigate('/ware')
         },
     })
 
-    const onSubmit = (cate: any) => {
-        mutation.mutate(cate)
+    const onSubmit = (ware: any) => {
+        mutation.mutate(ware)
     }
   return (
     <div>
@@ -48,10 +48,14 @@ const CategoryEdit = () => {
             </div>
 
             <div>
-                <label className="text-white dark:text-gray-200" >Slug</label>
-                <input type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" {...register('slug', {required: true})}/>
+                <label className="text-white dark:text-gray-200" >Số lượng</label>
+                <input type="number" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" {...register('countInStock', {required: true})}/>
             </div>
-
+            
+            <div>
+                <label className="text-white dark:text-gray-200" >Đơn vị</label>
+                <input type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" {...register('unit', {required: true})}/>
+            </div>
             
         </div>
 
@@ -65,4 +69,4 @@ const CategoryEdit = () => {
   )
 }
 
-export default CategoryEdit
+export default WareEdit

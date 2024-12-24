@@ -3,6 +3,7 @@ import axios from 'axios'
 import React from 'react'
 import {useForm} from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import instance from '../../config/axios'
 const CategoryAdd = () => {
     const navigate = useNavigate()
     const { 
@@ -13,7 +14,7 @@ const CategoryAdd = () => {
 
     const mutation = useMutation({
         mutationFn: async (cate) => {
-            const res = await axios.post('http://localhost:8000/api/categories', cate)
+            const res = await instance.post('/categories', cate)
             return res.data
         },
         onSuccess: () => {

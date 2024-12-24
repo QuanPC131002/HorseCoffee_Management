@@ -1,21 +1,22 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import React from 'react'
+import { useWareHouse } from '../../hook/warehouse/useWareHouse'
 import instance from '../../config/axios'
-import { useCategories } from '../../hook/category/useCategories'
+import { Link } from 'react-router-dom'
 
-const CategoryList = () => {
+const WareList = () => {
   const query = useQueryClient()
-  const { data, isLoading, isError } = useCategories() 
+  const { data, isLoading, isError } = useWareHouse() 
 
   const {mutate} = useMutation({
     mutationFn: async (id: number) => {
       if(confirm('Bạn có muốn xóa ?')) {
-        await instance.delete(`/categories/${id}`)
+        await instance.delete(`/ware/${id}`)
       }
     },
     onSuccess: () => {
       query.invalidateQueries({
-        queryKey: ['CATEGORIES']
+        queryKey: ['WareHouse']
       })
     }
   })
@@ -23,7 +24,6 @@ const CategoryList = () => {
   
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error fetching data</div>;
-
   return (
     <div>
       <section className="py-1 bg-blueGray-50">
@@ -32,11 +32,11 @@ const CategoryList = () => {
       <div className="rounded-t mb-0 px-4 py-3 border-0">
         <div className="flex flex-wrap items-center">
           <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-            <h3 className="font-semibold text-base text-blueGray-700">Danh Sách Danh Mục</h3>
+            <h3 className="font-semibold text-base text-blueGray-700">Danh Sách Kho</h3>
           </div>
           <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
             <button className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-              <Link to='/categories/add'>Thêm</Link>
+              <Link to='/ware/add'>Thêm</Link>
             </button>
           </div>
         </div>
@@ -53,7 +53,10 @@ const CategoryList = () => {
                 Tên
               </th>
               <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                Slug
+                Số lượng
+              </th>
+              <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                Đơn vị
               </th>
               <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                 Hành động
@@ -72,12 +75,16 @@ const CategoryList = () => {
                 </td>
 
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  {item.slug}
+                  {item.countInStock}
+                </td>
+
+                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                  {item.unit}
                 </td>
                 <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                   <button className="text-indigo-500 hover:text-indigo-700 px-3 py-1" onClick={() => mutate(item._id)}>Xóa</button>
                   <button className="text-indigo-500 hover:text-indigo-700 px-3 py-1">
-                    <Link to={`/categories/edit/${item._id}`}>Sửa</Link>
+                    <Link to={`/ware/edit/${item._id}`}>Sửa</Link>
                   </button>
                 </td>
               </tr>
@@ -93,4 +100,4 @@ const CategoryList = () => {
   )
 }
 
-export default CategoryList
+export default WareList
