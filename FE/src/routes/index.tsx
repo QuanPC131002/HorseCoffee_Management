@@ -8,13 +8,14 @@ import CategoryEdit from "../components/Category/CategoryEdit"
 import WareList from "../components/WareHouse/WareList"
 import WareAdd from "../components/WareHouse/WareAdd"
 import WareEdit from "../components/WareHouse/WareEdit"
+import ProductList from "../components/Product/ProductList"
+import ProductEdit from "../components/Product/ProductEdit"
 const IndexRouter = () => {
   return (
     <div>
       <Routes>
         <Route path='/' element={<LayoutAdmin />}>
           <Route path='order' element={<MenuAll />} />
-          <Route path='products' element={<ProductAdd />} />
           <Route path='categories'>
             <Route index element={<CategoryList />} />
             <Route path="add" element={<CategoryAdd />} />
@@ -24,6 +25,12 @@ const IndexRouter = () => {
             <Route index element={<WareList />} />
             <Route path="add" element={<WareAdd />} />
             <Route path="edit/:id" element={<WareEdit />} />
+          </Route>
+
+          <Route path='products'>
+            <Route index element={<ProductList />} />
+            <Route path="add" element={<ProductAdd />} />
+            <Route path="edit/:id" element={<ProductEdit />} />
           </Route>
         </Route>
       </Routes>

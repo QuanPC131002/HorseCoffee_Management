@@ -1,29 +1,39 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import instance from '../../config/axios'
 import { useCategories } from '../../hook/category/useCategories'
 import { useWareHouse } from '../../hook/warehouse/useWareHouse'
 
-const ProductAdd = () => {
+const ProductEdit = () => {
+    const { id } = useParams()
     const { data: categories = [] } = useCategories() 
     const { data: ware = [] } = useWareHouse() 
     const navigate = useNavigate()
     const { 
         register,
         handleSubmit,
-        formState: { errors }
+        formState: { errors },
+        reset
     } = useForm()
 
+    const {data} = useQuery({
+        queryKey: ['PRODUCT_EDIT', id],
+        queryFn: async () => {
+            const res = await instance.get(`/product/${id}`)
+            reset(res.data.data)
+            return res.data.data
+        }
+    })
     const mutation = useMutation({
         mutationFn: async (product: any) => {
-            const res = await instance.post('/product', product)
+            const res = await instance.put(`/product/${product._id}`, product)
             return res.data
         },
         onSuccess: () => {
-            alert("Thêm thành công!")
+            alert("Cập nhật thành công!")
             navigate('/products')
         },
     })
@@ -35,7 +45,7 @@ const ProductAdd = () => {
     return (
         <div>
             <section className="max-w-4xl p-6 mx-auto rounded-md shadow-md dark:bg-gray-800 mt-20">
-                <h1 className="text-xl font-bold text-white capitalize dark:text-white">Thêm Mới Sản Phẩm</h1>
+                <h1 className="text-xl font-bold text-white capitalize dark:text-white">Cập Nhật Sản Phẩm</h1>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
                         <div>
@@ -130,4 +140,4 @@ const ProductAdd = () => {
     )
 }
 
-export default ProductAdd
+export default ProductEdit

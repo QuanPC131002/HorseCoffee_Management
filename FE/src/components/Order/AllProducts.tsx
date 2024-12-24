@@ -1,14 +1,14 @@
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
+import instance from '../../config/axios'
 import { Coffee } from '../../upload'
 
 const MenuAll = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['CATEGORIES'],
     queryFn: async () => {
-      const res = await axios.get('http://localhost:8000/api/categories')
+      const res = await instance.get('/categories')
       return res.data.data
     }
   })
