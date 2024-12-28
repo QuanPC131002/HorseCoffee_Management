@@ -1,5 +1,24 @@
 import Cart from "../models/Cart";
 
+
+export const getCartByUserId = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const cart = await Cart.findOne({userId}).populate("products.productId")
+        const cartData = {
+            products: cart.products.map((item) => ({
+                productId: item.productId._id,
+                name: item.productId.name,
+                price: item.productId.price,
+                quantity: item.productId.quantity
+            }))
+        }
+
+        return res.status(200).json( cartData )
+    } catch (error) {
+        
+    }
+}
 // Thêm sản phẩm vào giỏ hàng
 export const addToCart = async (req, res) => {
     try {
@@ -40,7 +59,32 @@ export const addToCart = async (req, res) => {
     }
 };
 
+// Cập nhật số lượng sản phẩm trong giỏ hàng
+export const updateProductQuantity = async (req, res) => {
+    const { userId, productId, quantity } = req.body
+    try {
+        let cart = await Cart.findOne({ userId })
+        if(!cart) {
+            return res.status(404).json({ message: "Cart not found" });
+        }   
+        
+        const product = cart.products.find((item) => item.productId.toString() === productId)
+        if(!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
 
+        product.quantity = quantity;
+        await cart.save()
+
+        return res.status(200).json({ cart });
+    } catch (error) {
+        return res.status(500).json({
+            error: "Internal Server Error",
+            details: error.message,
+            stack: error.stack,
+        });
+    }
+}
 // Xóa sản phẩm trong giỏ hàng thuộc 1 user
 export const removeItemCart = async (req, res, next) => {
     try {
