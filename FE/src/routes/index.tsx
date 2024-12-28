@@ -10,6 +10,8 @@ import WareAdd from "../components/WareHouse/WareAdd"
 import WareEdit from "../components/WareHouse/WareEdit"
 import ProductList from "../components/Product/ProductList"
 import ProductEdit from "../components/Product/ProductEdit"
+import Login from "../components/Auth/Login/Login"
+import Register from "../components/Auth/Register/Register"
 const IndexRouter = () => {
   return (
     <div>
@@ -32,6 +34,11 @@ const IndexRouter = () => {
             <Route path="add" element={<ProductAdd />} />
             <Route path="edit/:id" element={<ProductEdit />} />
           </Route>
+        </Route>
+
+        <Route path='auth'>
+            <Route index element={<Login />} />
+            <Route path="register" element={<Register />} />
         </Route>
       </Routes>
     </div>
