@@ -12,7 +12,7 @@ export const createOrder = async (req, res) => {
         return res.status(500).json({ error: error.message });
     }
 }
-
+    
 export const getOrder = async (req, res) => {
     try {
         const order = await Order.find();

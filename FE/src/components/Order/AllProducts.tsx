@@ -4,13 +4,23 @@ import { useCategories } from '../../hook/category/useCategories'
 import { useProduct } from '../../hook/product/useProduct'
 import { useState } from 'react'
 import useCart from '../../hook/useCart'
+import { Link } from 'react-router-dom'
+import useOrder from '../../hook/useOrder'
 
 const MenuAll = () => {
   const { data:categries = [] } = useCategories()
   const { data:products  = [] } = useProduct()
-
-  const { mutate } = useCart()
+  const { createNewOrder} = useOrder() 
+  const { data, mutate, calculateTotal } = useCart()
   const [showTextarea, setShowTextarea] = useState(false)
+  const [notes, setNotes] = useState('')
+
+  const handleCreateOrder = () => {
+    const orderItem = data?.products || []
+    const totalPrice = calculateTotal()
+    const status = 'Processing' 
+    createNewOrder(orderItem, totalPrice, status, notes)
+  }
   return (
     <div>
        <div className="grid grid-cols-[60%,1fr] p-6 gap-10">
@@ -40,7 +50,7 @@ const MenuAll = () => {
                   action: 'add-to-cart',
                   productId: item._id,
                   quantity: 1,
-                  notes: '' 
+                  notes: notes || '' 
                 });
               }}
             >
@@ -67,30 +77,74 @@ const MenuAll = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className='text-center p-2'>Capuchino</td>
-                <td className='text-center p-2'>2</td>
-                <td className='text-center p-2'>50.000đ</td>
-                <td className='text-center p-2'>100.000đ</td>
-                <td className='text-center p-2'><FontAwesomeIcon icon={faTrash} /></td>
-              </tr>
+              {Array.isArray(data?.products) && data.products.map((item: any, index: number) => (
+                <tr key={index}>
+                  <td className='text-center p-2'>{item.name}</td>
+                  <td className='text-center p-2'>
+                    <div className="flex items-center justify-center">
+                      {/* Nút giảm số lượng */}
+                      <button
+                      onClick={() => mutate({
+                        action: 'decrease',
+                        productId: item.productId,
+                        quantity: item.quantity - 1,
+                        notes: notes || '' 
+
+                      })}
+                        className="bg-gray-200 px-2 py-1 rounded-l hover:bg-gray-300"
+                      >
+                        -
+                      </button>
+                      <span className="px-4">{item.quantity}</span>
+                      <button
+                       onClick={() => mutate({
+                        action: 'increase',
+                        productId: item.productId,
+                        quantity: item.quantity + 1,
+                        notes: notes || '' 
+
+                      })}
+                        className="bg-gray-200 px-2 py-1 rounded-r hover:bg-gray-300"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </td>
+                  <td className='text-center p-2'>{item.price} vnd</td>
+                  <td className='text-center p-2'>{item.price * item.quantity} vnd</td>
+                  <td className='text-center p-2'>
+                    <button onClick={() => mutate({
+                      action: 'remove',
+                      productId: item.productId,
+                      quantity: 0,
+                      notes: notes || '' 
+
+                    })}><FontAwesomeIcon icon={faTrash} /></button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
           <div className="flex flex-col p-4">
-            <p className="font-semibold text-lg">Tổng giá: <span className='text-red-600'>100.000đ</span></p>
+            <p className="font-semibold text-lg">Tổng giá: <span className='text-red-600'>{calculateTotal()} vnd</span></p>
             <div className="flex justify-end">
+              <button className='bg-green-700 text-white p-2 rounded-lg' onClick={handleCreateOrder}>
+                <Link to='/order/checkout'>Thanh toán</Link>
+              </button>
               <button
                 className='bg-blue-700 text-white p-2 rounded-lg mx-2'
                 onClick={() => setShowTextarea(!showTextarea)}>
                 Ghi Chú
               </button>
-              <button className='bg-red-700 text-white p-2 rounded-lg'>Hủy</button>
             </div>
             {showTextarea && (
               <textarea
                 className='w-full mt-4 p-2 border border-gray-300 rounded-lg'
                 rows={3}
-                placeholder='Nhập ghi chú...'></textarea>
+                placeholder='Nhập ghi chú...'
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                />
             )}
           </div>
         </div>

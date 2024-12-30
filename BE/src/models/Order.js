@@ -34,8 +34,7 @@ const orderSchema = new mongoose.Schema(
             enum: ['Processing', 'Completed', 'Canceled'],
         },
         notes: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Cart'
+            type: String,
         },
         orderDate: {
             type: Date,

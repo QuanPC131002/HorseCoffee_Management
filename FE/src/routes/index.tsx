@@ -12,12 +12,16 @@ import ProductList from "../components/Product/ProductList"
 import ProductEdit from "../components/Product/ProductEdit"
 import Login from "../components/Auth/Login/Login"
 import Register from "../components/Auth/Register/Register"
+import Checkout from "../components/Order/Checkout"
 const IndexRouter = () => {
   return (
     <div>
       <Routes>
         <Route path='/' element={<LayoutAdmin />}>
-          <Route path='order' element={<MenuAll />} />
+          <Route path='order'>
+            <Route index element={<MenuAll />} />
+            <Route path="checkout" element={<Checkout />} />
+          </Route>
           <Route path='categories'>
             <Route index element={<CategoryList />} />
             <Route path="add" element={<CategoryAdd />} />

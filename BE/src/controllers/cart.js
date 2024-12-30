@@ -10,9 +10,11 @@ export const getCartByUserId = async (req, res) => {
                 productId: item.productId._id,
                 name: item.productId.name,
                 price: item.productId.price,
-                quantity: item.productId.quantity
-            }))
-        }
+                quantity: item.quantity,
+                notes: cart.notes || '' 
+            })),
+            notes: cart.notes || ''  
+        };
 
         return res.status(200).json( cartData )
     } catch (error) {
@@ -121,6 +123,26 @@ export const removeItemCart = async (req, res, next) => {
         });
     }
 };
+
+export const clearCart = async (req, res) => {
+    try {
+      const userId = req.user._id;
+      const cart = await Cart.findOne({ userId });
+      if (!cart) {
+        return res.status(404).json({ message: "Cart not found" });
+      }
+  
+      cart.products = [];
+      await cart.save();
+      return res.status(200).json({ cart });
+    } catch (error) {
+        return res.status(500).json({
+            error: "Internal Server Error",
+            details: error.message,
+            stack: error.stack,
+        });
+    }
+  };
 
 // Tăng số lượng
 export const increaseItemQuantity = async (req, res) => {
