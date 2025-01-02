@@ -1,24 +1,35 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useLocalStorage } from './useStorage'
-import instance from '../config/axios'
 import Swal from 'sweetalert2'
+import instance from '../config/axios'
+import { useLocalStorage } from './useStorage'
 
 const useOrder = () => {
-  const queryClient = useQueryClient()
   const [user] = useLocalStorage('user', {})
-  const [cart, setCart] = useLocalStorage('cart', { products: [] }) 
-
+  
   const userId = user?.user?._id
 
+  const [order, setOrder] = useLocalStorage('order', {}); 
+  
+  const orderId = order?.order?._id;
+
+  
   const { data: orders } = useQuery({
-    queryKey: ['order', userId],
+    queryKey: ['order'],
     queryFn: async () => {
-      const { data } = await instance.get(`/order/${userId}`)
+      const { data } = await instance.get(`/order/`)
       return data
     },
-    enabled: !!userId, // Chỉ gọi API khi có userId
   })
 
+  const { data: orderDetail } = useQuery({
+    queryKey: ['order_detail', userId, orderId],
+    queryFn: async () => {
+      const { data } = await instance.get(`/order/${userId}/${orderId}`);
+      return data;
+    },
+  });
+  
+  
   const { mutate: createOrder } = useMutation({
     mutationFn: async ({ orderItem, totalPrice, status, notes, orderDate }: any) => {
       await instance.post('/order', {
@@ -30,14 +41,8 @@ const useOrder = () => {
         orderDate
       })
     },
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: ['order', userId]
-      })
-      
-      // Clear giỏ hàng trong localStorage
-      setCart({ products: [] })
-
+    onSuccess: (data) => {
+      setOrder({ order: data })
       Swal.fire({
         title: 'Tạo đơn thành công!',
         text: 'Đơn hàng của bạn đã được tạo thành công.',
@@ -50,6 +55,7 @@ const useOrder = () => {
   const createNewOrder = async (orderItem: string, totalPrice: number, status: string, notes: string) => {
     const orderDate = new Date().toISOString()
     createOrder({ orderItem, totalPrice, status, notes, orderDate })
+    
   }
 
   // Lấy đơn hàng mới nhất
@@ -57,6 +63,7 @@ const useOrder = () => {
 
   return {
     orders,
+    orderDetail,
     latestOrder,
     createNewOrder
   }

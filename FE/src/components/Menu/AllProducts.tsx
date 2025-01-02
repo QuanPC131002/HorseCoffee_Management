@@ -129,7 +129,7 @@ const MenuAll = () => {
             <p className="font-semibold text-lg">Tổng giá: <span className='text-red-600'>{calculateTotal()} vnd</span></p>
             <div className="flex justify-end">
               <button className='bg-green-700 text-white p-2 rounded-lg' onClick={handleCreateOrder}>
-                <Link to='/order/checkout'>Thanh toán</Link>
+                <Link to='/order'>Thanh toán</Link>
               </button>
               <button
                 className='bg-blue-700 text-white p-2 rounded-lg mx-2'

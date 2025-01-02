@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom"
-import MenuAll from "../components/Order/AllProducts"
+import MenuAll from "../components/Menu/AllProducts"
 import ProductAdd from "../components/Product/ProductAdd"
 import LayoutAdmin from "../layout/Admin"
 import CategoryAdd from "../components/Category/CategoryAdd"
@@ -12,15 +12,17 @@ import ProductList from "../components/Product/ProductList"
 import ProductEdit from "../components/Product/ProductEdit"
 import Login from "../components/Auth/Login/Login"
 import Register from "../components/Auth/Register/Register"
-import Checkout from "../components/Order/Checkout"
+import Checkout from "../components/Menu/Checkout"
+import Order from "../Order/OrderList"
+import OrderDetail from "../Order/OrderDetail"
 const IndexRouter = () => {
   return (
     <div>
       <Routes>
         <Route path='/' element={<LayoutAdmin />}>
-          <Route path='order'>
+          <Route path='menu'>
             <Route index element={<MenuAll />} />
-            <Route path="checkout" element={<Checkout />} />
+            {/* <Route path="checkout" element={<Checkout />} /> */}
           </Route>
           <Route path='categories'>
             <Route index element={<CategoryList />} />
@@ -38,12 +40,18 @@ const IndexRouter = () => {
             <Route path="add" element={<ProductAdd />} />
             <Route path="edit/:id" element={<ProductEdit />} />
           </Route>
+          <Route path="order">
+            <Route index element={<Order />} />
+            <Route path="detail/:userId/:orderId" element={<OrderDetail />} />
+          </Route>
         </Route>
 
         <Route path='auth'>
             <Route index element={<Login />} />
             <Route path="register" element={<Register />} />
         </Route>
+
+        
       </Routes>
     </div>
   )
