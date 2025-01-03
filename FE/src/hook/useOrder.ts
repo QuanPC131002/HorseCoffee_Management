@@ -2,15 +2,14 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Swal from 'sweetalert2'
 import instance from '../config/axios'
 import { useLocalStorage } from './useStorage'
+import { useParams } from 'react-router-dom'
 
 const useOrder = () => {
   const [user] = useLocalStorage('user', {})
   
   const userId = user?.user?._id
 
-  const [order, setOrder] = useLocalStorage('order', {}); 
-  
-  const orderId = order?.order?._id;
+  const {orderId} = useParams()
 
   
   const { data: orders } = useQuery({
@@ -29,6 +28,19 @@ const useOrder = () => {
     },
   });
   
+ const { mutate: updateOrderStatus } = useMutation({
+    mutationFn: async (status: string) => {
+      await instance.put(`/order/${orderId}`, { status})
+    },
+    onSuccess: () => {
+      Swal.fire({
+        title: 'Trả đồ thành công!',
+        // text: 'Đơn hàng của bạn đã được tạo thành công.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });
+    }
+ })
   
   const { mutate: createOrder } = useMutation({
     mutationFn: async ({ orderItem, totalPrice, status, notes, orderDate }: any) => {
@@ -41,8 +53,7 @@ const useOrder = () => {
         orderDate
       })
     },
-    onSuccess: (data) => {
-      setOrder({ order: data })
+    onSuccess: () => {
       Swal.fire({
         title: 'Tạo đơn thành công!',
         text: 'Đơn hàng của bạn đã được tạo thành công.',
@@ -64,6 +75,7 @@ const useOrder = () => {
   return {
     orders,
     orderDetail,
+    updateOrderStatus,
     latestOrder,
     createNewOrder
   }

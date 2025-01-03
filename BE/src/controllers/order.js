@@ -29,7 +29,7 @@ export const getOrder = async (req, res) => {
 export const getOrderById = async (req, res) => {
     try {
         const { userId, orderId } = req.params
-        const order = await Order.findOne({ userId, _id: orderId })
+        const order = await Order.findOne({ userId, _id: orderId }).populate('orderItem.productId', 'name');
         if(!order) {
             return res.status(404).json({ error: "Order not found" });
         }
@@ -50,7 +50,7 @@ export const updateOrderStatus= async (req, res) => {
             return res.status(400).json({ error: 'Invalid status'})
         }
 
-        const order = Order.findOne({ _id: orderId })
+        const order = await Order.findOne({ _id: orderId })
         if(!order) {
             return res.status(404).json({ error: "Order not found" });
         }

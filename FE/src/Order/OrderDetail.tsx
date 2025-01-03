@@ -1,81 +1,78 @@
-import React from 'react'
+import React, { useState } from 'react'
 import useOrder from '../hook/useOrder'
 import { Link } from 'react-router-dom'
 
 const OrderDetail = () => {
-    const { orderDetail } = useOrder()
+  const { orderDetail, updateOrderStatus } = useOrder()
+  const [status, setStatus] = useState('')
 
-    if (!orderDetail || !orderDetail.orderItem) {
-        return <div>Không có thông tin đơn hàng</div>
-      }
+  const handleStatusChange = (newStatus: string) => {
+    let statusText = '';
+    switch (newStatus) {
+      case '0':
+        statusText = 'Processing';
+        break;
+      case '1':
+        statusText = 'Completed';
+        break;
+      case '2':
+        statusText = 'Canceled';
+        break;
+      default:
+        statusText = 'Processing'; 
+    }
+  
+    setStatus(newStatus)
+    updateOrderStatus(statusText) 
+  }
+  
+
+  if (!orderDetail || !orderDetail.orderItem) {
+    return <div>Không có thông tin đơn hàng</div>
+  }
+
+  
+
   return (
-    <div>
-      <section className="py-1 bg-blueGray-50">
-        <div className="w-full xl:w-full mb-12 xl:mb-0 px-4 mx-auto mt-24">
-            <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded ">
-            <div className="rounded-t mb-0 px-4 py-3 border-0">
-                <div className="flex flex-wrap items-center">
-                <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-                    <h3 className="font-semibold text-base text-blueGray-700">Đơn Hàng Chi Tiết</h3>
-                </div>
-                <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
-                    <button className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                    <Link to='/products/add'>Xác nhận</Link>
-                    </button>
-                </div>
-                </div>
-            </div>
-
-            <div className="block w-full overflow-x-auto">
-                <table className="items-center bg-transparent w-full border-collapse">
-                <thead>
-                    <tr>
-                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                        Tên
-                    </th>
-                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                        Số lượng
-                    </th>
-                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                        Giá
-                    </th>
-                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                        Tổng tiền
-                    </th>
-                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                        Trạng thái
-                    </th>
-                    
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {orderDetail && orderDetail.orderItem && orderDetail.orderItem.map((item: any, index: number) => (
-                    <tr key={index}>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        {item.productId}
-                        </td>
-
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        {item.quantity}
-                        </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        {item.price} vnd
-                        </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        {orderDetail.totalPrice} vnd
-                        </td>
-                        <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        {orderDetail.status}
-                        </td>
-                    </tr>
-                    ))}
-                </tbody>
-                </table>
-            </div>
-            </div>
+    <div className="p-6 min-h-screen">
+      <div className="bg-white shadow-md rounded-lg p-4 max-w-3xl mx-auto">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="py-2 px-4 text-sm font-medium">Tên</th>
+                <th className="py-2 px-4 text-sm font-medium">Số lượng</th>
+                <th className="py-2 px-4 text-sm font-medium">Giá</th>
+                <th className="py-2 px-4 text-sm font-medium">Thành tiền</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orderDetail.orderItem.map((item: any, index: number) => (
+                <tr key={index} className={`${index % 2 === 0 ? 'bg-gray-50' : ''}`}>
+                  <td className="py-2 px-4 text-sm">{item.productId.name}</td>
+                  <td className="py-2 px-4 text-sm">{item.quantity}</td>
+                  <td className="py-2 px-4 text-sm">{item.price} VND</td>
+                  <td className="py-2 px-4 text-sm">{item.price * item.quantity} VND</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      </section>
+        <div className="mt-6">
+          <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
+            Ghi chú
+          </label>
+          <p id="notes" className="mt-2 p-2 w-full  font-bold">{orderDetail.notes || "Không có ghi chú"}</p>
+        </div>
+        <div className="flex justify-end mt-6">
+          <button
+            className="bg-green-500 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-green-600 transition-all"
+            onClick={() => handleStatusChange('1')} // Gọi hàm khi nhấn "Trả đồ"
+          >
+            <Link to='/order'>Trả đồ</Link>
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
