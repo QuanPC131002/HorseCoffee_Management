@@ -11,6 +11,7 @@ const useOrder = () => {
 
   const {orderId} = useParams()
 
+  const queryClient = useQueryClient()
   
   const { data: orders } = useQuery({
     queryKey: ['order'],
@@ -20,9 +21,11 @@ const useOrder = () => {
     },
   })
 
+
   const { data: orderDetail } = useQuery({
     queryKey: ['order_detail', userId, orderId],
     queryFn: async () => {
+      if (!orderId) return null;
       const { data } = await instance.get(`/order/${userId}/${orderId}`);
       return data;
     },
@@ -39,7 +42,7 @@ const useOrder = () => {
         icon: 'success',
         confirmButtonText: 'OK'
       });
-    }
+    },
  })
   
   const { mutate: createOrder } = useMutation({
@@ -60,7 +63,7 @@ const useOrder = () => {
         icon: 'success',
         confirmButtonText: 'OK'
       });
-    }
+    },
   })
 
   const createNewOrder = async (orderItem: string, totalPrice: number, status: string, notes: string) => {

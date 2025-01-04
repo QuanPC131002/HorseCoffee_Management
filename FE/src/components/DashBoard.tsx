@@ -1,4 +1,4 @@
-import { faBars, faCartShopping, faFolder, faHouse, faRightFromBracket, faSearch, faTrash, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faCartShopping, faFolder, faHouse, faPenToSquare, faRightFromBracket, faSearch, faTrash, faUser, faWarehouse } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 import { Avatar, Coffee, Logo } from '../upload'
@@ -13,22 +13,22 @@ const DashBoard = () => {
         </div>
       <div className="mt-10 mb-10">
         <div className="p-4 text-center my-10">
-            <Link to='/menu'><FontAwesomeIcon icon={faHouse} className='h-[30px]'/>Đặt Hàng</Link>
+            <Link to='/menu'><FontAwesomeIcon icon={faPenToSquare} className='h-[20px] mx-2'/>Đặt Hàng</Link>
           </div>
           <div className="p-4 text-center my-10">
-            <Link to='/products'><FontAwesomeIcon icon={faBars} className='h-[30px]'/>Quản Lí Sản Phẩm</Link>
+            <Link to='/products'><FontAwesomeIcon icon={faBars} className='h-[20px] mx-2'/>Quản Lí Sản Phẩm</Link>
           </div>
           <div className="p-4 text-center my-10">
-            <Link to='/categories'><FontAwesomeIcon icon={faFolder} className='h-[30px]'/>Quản Lí Danh Mục</Link>
+            <Link to='/categories'><FontAwesomeIcon icon={faFolder} className='h-[20px] mx-2'/>Quản Lí Danh Mục</Link>
           </div>
           <div className="p-4 text-center my-10">
-            <Link to='/ware'><FontAwesomeIcon icon={faUser} className='h-[30px]'/>Kho Nguyên Liệu</Link>
+            <Link to='/ware'><FontAwesomeIcon icon={faWarehouse} className='h-[20px] mx-2'/>Kho Nguyên Liệu</Link>
           </div>
           <div className="p-4 text-center my-10">
-            <Link to='/order'><FontAwesomeIcon icon={faCartShopping} className='h-[30px]'/>Quản Lí Đơn Hàng</Link>
+            <Link to='/order'><FontAwesomeIcon icon={faCartShopping} className='h-[20px] mx-2'/>Quản Lí Đơn Hàng</Link>
           </div>
           <div className="p-4 text-center my-20">
-          <Link to='/auth'><FontAwesomeIcon icon={faRightFromBracket} className='h-[30px]'/></Link>
+          <Link to='/auth'><FontAwesomeIcon icon={faRightFromBracket} className='h-[20px] mx-2'/></Link>
           </div>
         </div>
       </div>

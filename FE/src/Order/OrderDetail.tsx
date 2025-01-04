@@ -59,19 +59,37 @@ const OrderDetail = () => {
           </table>
         </div>
         <div className="mt-6">
-          <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
-            Ghi chú
-          </label>
-          <p id="notes" className="mt-2 p-2 w-full  font-bold">{orderDetail.notes || "Không có ghi chú"}</p>
+            
+          <p id="notes" className="mt-2 p-2 w-full">Ghi chú: <span className=''>{orderDetail.notes || "Không có ghi chú"}</span></p>
         </div>
         <div className="flex justify-end mt-6">
-          <button
-            className="bg-green-500 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-green-600 transition-all"
-            onClick={() => handleStatusChange('1')} // Gọi hàm khi nhấn "Trả đồ"
-          >
-            <Link to='/order'>Trả đồ</Link>
-          </button>
+          {status === '1' ? (
+            <>
+              <p className="text-green-600 text-sm font-medium">
+                Đồ đã được trả hết
+              </p>
+              <Link
+                to="/order"
+                className="ml-4 bg-blue-500 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-blue-600 transition-all"
+              >
+                Trở về
+              </Link>
+            </>
+          ) : orderDetail.status === 'Completed' ? (
+            <p className="text-yellow-500 text-sm font-medium text-center">
+              Đơn hàng đã hoàn thành. Không thể trả đồ.
+            </p>
+            
+          ) : (
+            <button
+              className="bg-green-500 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-green-600 transition-all"
+              onClick={() => handleStatusChange('1')}
+            >
+              Trả đồ
+            </button>
+          )}
         </div>
+
       </div>
     </div>
   )

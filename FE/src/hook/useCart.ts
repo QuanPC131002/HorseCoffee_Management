@@ -8,12 +8,12 @@ const useCart = () => {
 
     const userId = user?.user?._id
 
-    const { data } = useQuery({
+    const { data, refetch } = useQuery({
         queryKey: ['cart', userId],
         queryFn: async () => {
             const {data} = await instance.get(`cart/${userId}`)
             return data
-        }
+        },
     })
 
     const { mutate } = useMutation({
@@ -62,6 +62,7 @@ const useCart = () => {
             queryClient.invalidateQueries({
                 queryKey: ['cart', userId]
             });
+            refetch()
             if (action === 'add-to-cart') {
                 toast.success('Thêm thành công')
             }

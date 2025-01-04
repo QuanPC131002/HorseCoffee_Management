@@ -65,7 +65,7 @@ export const signIn = async (req, res) => {
       }
   
       const accessToken = jwt.sign({ id: checkUser._id }, SECRET_CODE, {
-        expiresIn: "10d",
+        expiresIn: "1d",
       });
       if (!accessToken) {
         return res.status(400).json({

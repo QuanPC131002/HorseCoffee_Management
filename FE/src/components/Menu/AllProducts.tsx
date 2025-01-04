@@ -27,7 +27,7 @@ const MenuAll = () => {
           <div className="">
             {/* Nav Categories */}
               <div className="p-4">
-                {categries.map((item: any,index: number) => (
+                {categries.map((item: any) => (
                 <button className='text-white p-4 bg-gray-300 mx-4 rounded-xl text-black font-semibold hover:bg-red-400 hover:text-white'>{item.name}</button>
                 
               ))}
@@ -88,7 +88,7 @@ const MenuAll = () => {
                         action: 'decrease',
                         productId: item.productId,
                         quantity: item.quantity - 1,
-                        notes: notes || '' 
+                        // notes: notes || '' 
 
                       })}
                         className="bg-gray-200 px-2 py-1 rounded-l hover:bg-gray-300"
@@ -101,7 +101,7 @@ const MenuAll = () => {
                         action: 'increase',
                         productId: item.productId,
                         quantity: item.quantity + 1,
-                        notes: notes || '' 
+                        // notes: notes || '' 
 
                       })}
                         className="bg-gray-200 px-2 py-1 rounded-r hover:bg-gray-300"
