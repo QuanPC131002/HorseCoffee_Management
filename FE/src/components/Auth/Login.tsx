@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useLocalStorage } from '../../../hook/useStorage'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
-import instance from '../../../config/axios'
+import { useLocalStorage } from '../../hook/useStorage'
+import instance from '../../config/axios'
 
 const Login = () => {
     const [, setUser] = useLocalStorage('user', {})
@@ -58,7 +58,7 @@ const Login = () => {
                 <div className="flex items-center justify-between">
                 <label  className="block text-sm/6 font-medium text-gray-900">Password</label>
                 <div className="text-sm">
-                    <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a>
+                    <Link to='/auth/forgot-password' className="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</Link>
                 </div>
                 </div>
                 <div className="mt-2">

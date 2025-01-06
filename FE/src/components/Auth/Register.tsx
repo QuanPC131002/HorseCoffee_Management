@@ -1,10 +1,10 @@
 import React from 'react'
-import { useLocalStorage } from '../../../hook/useStorage'
 import { useForm } from 'react-hook-form'
 import Password from 'antd/es/input/Password'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import instance from '../../../config/axios'
 import { useNavigate } from 'react-router-dom'
+import { useLocalStorage } from '../../hook/useStorage'
+import instance from '../../config/axios'
 
 const Register = () => {
     const [, setUser] = useLocalStorage('user', {})
