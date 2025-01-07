@@ -1,10 +1,9 @@
-import dotenv from "dotenv"
+import bcrypt from "bcrypt";
+import crypto from "crypto";
+import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
 import User from "../models/User";
-import bcrypt from "bcrypt"
-import jwt from "jsonwebtoken"
-import crypto from "crypto"
-import nodemailer from "nodemailer"
-import { log } from "console";
 dotenv.config();
 
 const { SECRET_CODE, SEND_OTP_EMAIL, SEND_OTP_EMAIL_PASSWORD } = process.env;
@@ -146,13 +145,11 @@ export const resetPassword = async (req, res) => {
       });
     }
      // Mã hóa mật khẩu mới
-
     const hashPassword = await bcrypt.hash(newPassword, 10)
      // Cập nhật mật khẩu và xóa OTP
     user.password = hashPassword
     user.otp = null
     await user.save()
-
     res.status(200).json({ message: "Mật khẩu đã được cập nhật thành công!" });
   } catch (error) {
     return res.status(500).json({
@@ -191,3 +188,16 @@ export const changePassword = async (req, res) => {
     });
   }
 }
+
+export const logout = (req, res) => {
+  try {
+    res.clearCookie('token'); 
+
+    res.status(200).json({ message: "Đăng xuất thành công!" });
+  } catch (error) {
+    return res.status(500).json({
+      name: error.name || "Error",
+      message: error.message || "Server error!",
+    });
+  }
+};

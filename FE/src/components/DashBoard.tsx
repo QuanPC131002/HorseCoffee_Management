@@ -1,10 +1,45 @@
-import { faBars, faCartShopping, faFolder, faHouse, faPenToSquare, faRightFromBracket, faSearch, faTrash, faUser, faWarehouse } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faCartShopping, faFolder, faPenToSquare, faSearch, faWarehouse } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
-import { Avatar, Coffee, Logo } from '../upload'
-import { Link, Outlet } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
+import { Button } from 'antd'
+import { useState } from 'react'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
+import instance from '../config/axios'
+import { Avatar, Logo } from '../upload'
 
 const DashBoard = () => {
+  const [confirmLogout, setConfirmLogout] = useState(false);
+  const navigate = useNavigate()
+
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      await instance.post(`/auth/logout`);
+    },
+    onSuccess: () => {
+       Swal.fire({
+          title: 'Đăng xuất thành công!',
+          icon: 'success',
+          confirmButtonText: 'OK'
+      });
+      navigate("/auth");
+    },
+    onError: (error) => {
+      console.error('Logout failed:', error);
+    }
+  });
+
+  const handleLogout = () => {
+    if (confirmLogout) {
+      mutate();
+    } else {
+      setConfirmLogout(true);
+      setTimeout(() => {
+        setConfirmLogout(false); 
+      }, 5000);
+    }
+  };
+ 
   return (
     <div className="w-full h-screen grid grid-cols-[10%,1fr]">
       <div className="bg-gray-300">
@@ -28,7 +63,9 @@ const DashBoard = () => {
             <Link to='/order'><FontAwesomeIcon icon={faCartShopping} className='h-[20px] mx-2'/>Quản Lí Đơn Hàng</Link>
           </div>
           <div className="p-4 text-center my-20">
-          <Link to='/auth'><FontAwesomeIcon icon={faRightFromBracket} className='h-[20px] mx-2'/></Link>
+          <Button danger onClick={handleLogout}>
+              {confirmLogout ? "Xác nhận" : "Đăng xuất"}
+            </Button>
           </div>
         </div>
       </div>
@@ -54,7 +91,7 @@ const DashBoard = () => {
             </div>
             <div className="flex m-auto">
               <div className="">
-                <img src={Avatar} alt="" className='w-[50px] rounded-full'/>
+                <Link to='/auth/'><img src={Avatar} alt="" className='w-[50px] rounded-full'/></Link>
               </div>
               <div className="ml-2">
                 <h3 className='text-white font-bold'>Minh Quân</h3>

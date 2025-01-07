@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema(
         },
         email: {
             type: String,
-            required: true
+            required: true,
+            unique: true
         },
         password: {
             type: String,
@@ -16,8 +17,12 @@ const userSchema = new mongoose.Schema(
         phone: {
             type: Number
         },
+        avatar: {
+            type: String,
+        },
         role: {
             type: String,
+            enum: ['member','cash','admin'],
             default: 'member'
         },
         otp: {

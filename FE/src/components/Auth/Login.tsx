@@ -1,9 +1,9 @@
-import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
-import { useLocalStorage } from '../../hook/useStorage'
+import { useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import instance from '../../config/axios'
+import { useLocalStorage } from '../../hook/useStorage'
 
 const Login = () => {
     const [, setUser] = useLocalStorage('user', {})
@@ -26,7 +26,11 @@ const Login = () => {
         onSuccess: (data) => {
             setUser(data),
             navigate('/')
-            alert('Đăng nhập thành công')
+            Swal.fire({
+                title: 'Đăng nhập thành công!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
         },
         onError: (error) => console.log(error)
     })
