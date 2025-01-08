@@ -17,6 +17,8 @@
   import PrivateRoute from './PrivateRouter';
   import ResetPassword from '../components/Auth/ResetPassword';
   import ForgotPassword from '../components/Auth/ForgotPasswod';
+import LayoutProfile from '../components/Auth/Profile/LayoutProfile';
+import ChangePassword from '../components/Auth/Profile/ChangePassword';
 
   const IndexRouter = () => {
     return (
@@ -47,6 +49,10 @@
               <Route index element={<PrivateRoute element={<Order />} />} />
               <Route path="detail/:userId/:orderId" element={<PrivateRoute element={<OrderDetail />} />} />
             </Route>
+            <Route path='profile'>
+              <Route index element={<PrivateRoute element={<LayoutProfile />} />} />
+              <Route path='change-password' element={<PrivateRoute element={<ChangePassword />} />} />
+            </Route>
           </Route>
 
           <Route path='auth'>
@@ -54,6 +60,7 @@
             <Route path="register" element={<Register />} />
             <Route path="forgot-password" element={<ForgotPassword />} />
             <Route path="reset-password" element={<ResetPassword />} />
+            {/* <Route path="profile" element={<LayoutProfile />} /> */}
           </Route>
         </Routes>
       </div>

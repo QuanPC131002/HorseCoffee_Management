@@ -91,7 +91,7 @@ const DashBoard = () => {
             </div>
             <div className="flex m-auto">
               <div className="">
-                <Link to='/auth/'><img src={Avatar} alt="" className='w-[50px] rounded-full'/></Link>
+                <Link to='/profile'><img src={Avatar} alt="" className='w-[50px] rounded-full'/></Link>
               </div>
               <div className="ml-2">
                 <h3 className='text-white font-bold'>Minh Quân</h3>
