@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import instance from '../../config/axios'
@@ -10,6 +10,8 @@ import { useWareHouse } from '../../hook/warehouse/useWareHouse'
 const ProductAdd = () => {
     const { data: categories = [] } = useCategories() 
     const { data: ware = [] } = useWareHouse() 
+    const [imageUrl, setImageUrl] = useState('');
+
     const navigate = useNavigate()
     const { 
         register,
@@ -27,11 +29,26 @@ const ProductAdd = () => {
             navigate('/products')
         },
     })
-
+    const handleUpload = () => {
+        window.cloudinary.createUploadWidget(
+        {
+            cloudName: 'doikbjukg',
+            uploadPreset: 'Image1', // Tạo upload preset trong dashboard của Cloudinary
+        },
+        (error: any, result: any) => {
+            if (result && result.event === 'success') {
+            setImageUrl(result.info.secure_url); // Lấy URL ảnh đã upload
+            }
+        }
+        ).open();
+    };
     const onSubmit = (product: any) => {
-        mutation.mutate(product)
+        const productData = { ...product, image: imageUrl };
+        mutation.mutate(productData)
     }
 
+
+   
     return (
         <div>
             <section className="max-w-4xl p-6 mx-auto rounded-md shadow-md dark:bg-gray-800 mt-20">
@@ -90,11 +107,10 @@ const ProductAdd = () => {
 
                         <div>
                             <label className="text-white dark:text-gray-200">Ảnh</label>
-                            <input
-                                type="text"
-                                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
-                                {...register('image', { required: true })}
-                            />
+                            <button type="button" onClick={handleUpload} className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                                Upload Image
+                            </button>
+                            {imageUrl && <img src={imageUrl} alt="Uploaded" style={{ width: '100px', marginTop: '10px' }} />}
                         </div>
 
                         <div>
