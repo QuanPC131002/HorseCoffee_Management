@@ -201,3 +201,19 @@ export const logout = (req, res) => {
     });
   }
 };
+
+export const getUserById = async (req, res) => {
+  try {
+    const data = await User.findOne({_id: req.params.id})
+    if(!data) {
+      return res.status(400).json({message: 'User not found'})
+    } else {
+      return res.status(200).json({ message: 'User successfully', data})
+    }
+  } catch (error) {
+    return res.status(500).json({
+      name: error.name || "Error",
+      message: error.message || "Server error!",
+    });
+  }
+}

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { changePassword, forgotPassword, logout, resetPassword, signIn, signUp } from "../controllers/auth";
+import { changePassword, forgotPassword, getUserById, logout, resetPassword, signIn, signUp } from "../controllers/auth";
 
 const authRouter = Router ()
 authRouter.post('/signup', signUp)
@@ -8,5 +8,6 @@ authRouter.post('/forgot-password', forgotPassword)
 authRouter.post('/reset-password', resetPassword)
 authRouter.post('/logout', logout)
 authRouter.put('/change-password', changePassword)
+authRouter.get('/:id', getUserById)
 
 export default authRouter
