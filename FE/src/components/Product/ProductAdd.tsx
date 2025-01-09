@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { Button, Form, Input, InputNumber, Select, message } from 'antd';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Form, Input, InputNumber, Select, Upload, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
 import instance from '../../config/axios';
 import { useCategories } from '../../hook/category/useCategories';
 import { useWareHouse } from '../../hook/warehouse/useWareHouse';
 import { Product } from '../../interfaces/Product';
+import ImageUpload from '../../utils/Upload';
 
 const { Option } = Select;
 
@@ -30,19 +30,8 @@ const ProductAdd = () => {
     },
   });
 
-  const handleUpload = () => {
-    window.cloudinary.createUploadWidget(
-      {
-        cloudName: 'doikbjukg',
-        uploadPreset: 'Image1',
-      },
-      (error: any, result: any) => {
-        if (result && result.event === 'success') {
-          setImageUrl(result.info.secure_url);
-          message.success('Tải ảnh lên thành công!');
-        }
-      }
-    ).open();
+  const handleImageUploadSuccess = (url: any) => {
+    setImageUrl(url);
   };
 
   const onSubmit = (product: any) => {
@@ -118,10 +107,7 @@ const ProductAdd = () => {
         </Form.Item>
 
         <Form.Item label="Ảnh">
-          <Button icon={<UploadOutlined />} onClick={handleUpload}>
-            Tải ảnh lên
-          </Button>
-          {imageUrl && <img src={imageUrl} alt="Uploaded" style={{ marginTop: '10px', maxWidth: '100px' }} />}
+          <ImageUpload onUploadSuccess={handleImageUploadSuccess} />
         </Form.Item>
 
         <Form.Item

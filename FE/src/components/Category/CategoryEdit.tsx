@@ -1,26 +1,19 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import axios from 'axios'
-import React from 'react'
-import {useForm} from 'react-hook-form'
+import { Button, Form, Input, message } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import instance from '../../config/axios'
 const CategoryEdit = () => {
     const { id } = useParams()
     const navigate = useNavigate()
-    const { 
-        register,
-        handleSubmit,
-        formState: {errors},
-        reset
-    } = useForm()
+    const [form] = Form.useForm()
 
     const {data} = useQuery({
         queryKey: ['CATEGORIES_EDIT', id],
         queryFn: async () => {
             const res = await instance.get(`/categories/${id}`)
-            reset(res.data.data)
+            form.setFieldsValue(data)
             return res.data.data
-        }
+        },
     })
     const mutation = useMutation({
         mutationFn: async (cate: any) => {
@@ -28,7 +21,7 @@ const CategoryEdit = () => {
             return res.data
         },
         onSuccess: () => {
-            alert("Cập nhật thành công!"),
+            message.success("Cập nhật thành công!"),
             navigate('/categories')
         },
     })
@@ -38,27 +31,38 @@ const CategoryEdit = () => {
     }
   return (
     <div>
-      <section className="max-w-4xl p-6 mx-auto  rounded-md shadow-md dark:bg-gray-800 mt-20">
-        <h1 className="text-xl font-bold text-white capitalize dark:text-white">Cập Nhật Danh Mục</h1>
-    <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
-            <div>
-                <label className="text-white dark:text-gray-200">Tên</label>
-                <input type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" {...register('name', {required: true})} />
-            </div>
+      <section className="max-w-4xl p-6 mx-auto  rounded-md shadow-md bg-white mt-20">
+        <h1 className="text-xl font-bold text-black capitalize text-center mb-4">Thêm Mới Danh Mục</h1>
+        <Form
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 14 }}
+        onFinish={onSubmit}
+        initialValues={data}
+        autoComplete="off"
+      >
+        <Form.Item
+          label="Tên danh mục"
+          name="name"
+          rules={[{ required: true, message: 'Vui lòng nhập tên danh mục!' }]}
+        >
+          <Input placeholder="Nhập tên danh mục" />
+        </Form.Item>
 
-            <div>
-                <label className="text-white dark:text-gray-200" >Slug</label>
-                <input type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" {...register('slug', {required: true})}/>
-            </div>
-
-            
-        </div>
-
-        <div className="flex justify-end mt-6">
-            <button className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600">Lưu</button>
-        </div>
-    </form>
+        <Form.Item
+          label="Slug"
+          name="slug"
+          rules={[{ required: true, message: 'Vui lòng nhập slug!' }]}
+        >
+          <Input placeholder="Nhập slug" />
+        </Form.Item>
+        
+       
+        <Form.Item wrapperCol={{ offset: 6, span: 14 }}>
+          <Button type="primary" htmlType="submit">
+            Lưu
+          </Button>
+        </Form.Item>
+    </Form>
 </section>
  
     </div>

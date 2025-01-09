@@ -1,12 +1,12 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Button, Form, Input, InputNumber, Select, Upload, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import React, { useState } from 'react';
+import { Button, Form, Input, InputNumber, Select, message } from 'antd';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import instance from '../../config/axios';
 import { useCategories } from '../../hook/category/useCategories';
 import { useWareHouse } from '../../hook/warehouse/useWareHouse';
 import { Product } from '../../interfaces/Product';
+import ImageUpload from '../../utils/Upload';
 
 const { Option } = Select;
 
@@ -18,17 +18,17 @@ const ProductEdit = () => {
   const [imageUrl, setImageUrl] = useState('');
   const navigate = useNavigate();
 
-  const { data } = useQuery({
+  useQuery({
     queryKey: ['PRODUCT_EDIT', id],
     queryFn: async () => {
-      const {data} = await instance.get(`/product/${id}`);
-      form.setFieldsValue(data);
-      setImageUrl(data.image); 
-      return data;
+      const res = await instance.get(`/product/${id}`);
+      form.setFieldsValue(res.data.data);
+      setImageUrl(res.data.data.image); 
+      return res.data.data;
     },
   });
 
-  const mutation = useMutation({
+  const {mutate} = useMutation({
     mutationFn: async (product: Product) => {
       const {data} = await instance.put(`/product/${product._id}`, product);
       return data;
@@ -39,26 +39,13 @@ const ProductEdit = () => {
     },
   });
 
-  const handleUpload = () => {
-    window.cloudinary.createUploadWidget(
-      {
-        cloudName: 'doikbjukg',
-        uploadPreset: 'Image1',
-      },
-      (error: any, result: any) => {
-        if (result && result.event === 'success') {
-          setImageUrl(result.info.secure_url);
-          form.setFieldValue('image', result.info.secure_url);
-        }
-      }
-    ).open();
+  const handleImageUploadSuccess = (url: any) => {
+    setImageUrl(url);
   };
 
   const onSubmit = (product: Product) => {
-    console.log(product);
-    
     const productData = { ...product, image: imageUrl };
-    mutation.mutate(productData);
+    mutate(productData);
   };
   
   return (
@@ -69,7 +56,6 @@ const ProductEdit = () => {
           form={form}
           layout="vertical"
           onFinish={onSubmit}
-          initialValues={{ image: '' }}
         >
           <Form.Item
             label="Danh mục"
@@ -129,18 +115,11 @@ const ProductEdit = () => {
             </Select>
           </Form.Item>
 
-          <Form.Item label="Ảnh" name="image">
-            <Button icon={<UploadOutlined />} onClick={handleUpload}>
-              Upload Image
-            </Button>
-            {imageUrl && (
-              <img
-                src={imageUrl}
-                alt="Uploaded"
-                style={{ width: '100px', marginTop: '10px' }}
-              />
-            )}
-          </Form.Item>
+        <Form.Item label="Ảnh">
+            <ImageUpload onUploadSuccess={handleImageUploadSuccess} />
+            {imageUrl && <img src={imageUrl} alt="Uploaded" style={{ marginTop: '10px', maxWidth: '100px' }} />}
+        </Form.Item>
+
 
           <Form.Item
             label="Giá"

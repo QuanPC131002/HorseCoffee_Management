@@ -1,24 +1,18 @@
 import { useMutation } from '@tanstack/react-query'
-import axios from 'axios'
-import React from 'react'
-import {useForm} from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { Button, Form, Input, InputNumber, message } from 'antd'
+import {  useNavigate } from 'react-router-dom'
 import instance from '../../config/axios'
+
+
 const WareAdd = () => {
     const navigate = useNavigate()
-    const { 
-        register,
-        handleSubmit,
-        formState: {errors}
-    } = useForm()
-
     const mutation = useMutation({
         mutationFn: async (ware) => {
             const res = await instance.post('/ware', ware)
             return res.data
         },
         onSuccess: () => {
-            alert("Thêm thành công!"),
+            message.success("Thêm thành công!"),
             navigate('/ware')
         },
     })
@@ -28,31 +22,45 @@ const WareAdd = () => {
     }
   return (
     <div>
-      <section className="max-w-4xl p-6 mx-auto  rounded-md shadow-md dark:bg-gray-800 mt-20">
-        <h1 className="text-xl font-bold text-white capitalize dark:text-white">Thêm Mới Danh Mục</h1>
-    <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
-            <div>
-                <label className="text-white dark:text-gray-200">Tên</label>
-                <input type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" {...register('name', {required: true})} />
-            </div>
+      <section className="max-w-4xl p-6 mx-auto  rounded-md shadow-md bg-white mt-20">
+    <h1 className="text-xl font-bold text-black capitalize text-center mb-4 ">Thêm Mới Kho</h1>
+    <Form
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 14 }}
+        onFinish={onSubmit}
+        autoComplete="off"
+      >
+        <Form.Item
+          label="Tên nguyên liệu"
+          name="name"
+          rules={[{ required: true, message: 'Vui lòng nhập tên nguyên liệu!' }]}
+        >
+          <Input placeholder="Nhập tên nguyên liệu" />
+        </Form.Item>
 
-            <div>
-                <label className="text-white dark:text-gray-200" >Số lượng</label>
-                <input type="number" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" {...register('countInStock', {required: true})}/>
-            </div>
-            
-            <div>
-                <label className="text-white dark:text-gray-200" >Đơn vị</label>
-                <input type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" {...register('unit', {required: true})}/>
-            </div>
-            
-        </div>
+        <Form.Item
+          label="Số lượng"
+          name="countInStock"
+          rules={[{ required: true, message: 'Vui lòng nhập số lượng!' }]}
+        >
+          <InputNumber min={1} style={{ width: '100%' }} placeholder="Nhập số lượng" />
+        </Form.Item>
 
-        <div className="flex justify-end mt-6">
-            <button className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600">Lưu</button>
-        </div>
-    </form>
+        <Form.Item
+          label="Đơn vị"
+          name="unit"
+          rules={[{ required: true, message: 'Vui lòng nhập đơn vị!' }]}
+        >
+            <Input placeholder="Nhập đơn vị" />
+
+        </Form.Item>
+       
+        <Form.Item wrapperCol={{ offset: 6, span: 14 }}>
+          <Button type="primary" htmlType="submit">
+            Lưu
+          </Button>
+        </Form.Item>
+    </Form>
 </section>
  
     </div>
