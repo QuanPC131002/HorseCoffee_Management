@@ -19,10 +19,11 @@ const productSchema = new mongoose.Schema(
             enum: [0,1],
             default: 0
         },
-        // featured: {
-        //     type: Boolean,
-        //     default: 0,
-        // },
+        count: {
+            type: Number,
+            required: true, 
+            min: 0
+        },
         discount: {
             type: Number,
             default: 0,

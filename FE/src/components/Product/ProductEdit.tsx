@@ -1,161 +1,168 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
-import axios from 'axios'
-import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useNavigate, useParams } from 'react-router-dom'
-import instance from '../../config/axios'
-import { useCategories } from '../../hook/category/useCategories'
-import { useWareHouse } from '../../hook/warehouse/useWareHouse'
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { Button, Form, Input, InputNumber, Select, Upload, message } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import instance from '../../config/axios';
+import { useCategories } from '../../hook/category/useCategories';
+import { useWareHouse } from '../../hook/warehouse/useWareHouse';
+import { Product } from '../../interfaces/Product';
+
+const { Option } = Select;
 
 const ProductEdit = () => {
-    const { id } = useParams()
-    const { data: categories = [] } = useCategories() 
-    const { data: ware = [] } = useWareHouse() 
-    const [imageUrl, setImageUrl] = useState('');
-    
-    const navigate = useNavigate()
-    const { 
-        register,
-        handleSubmit,
-        formState: { errors },
-        reset
-    } = useForm()
+  const { id } = useParams();
+  const { data: categories = [] } = useCategories();
+  const { data: ware = [] } = useWareHouse();
+  const [form] = Form.useForm();
+  const [imageUrl, setImageUrl] = useState('');
+  const navigate = useNavigate();
 
-    const {data} = useQuery({
-        queryKey: ['PRODUCT_EDIT', id],
-        queryFn: async () => {
-            const res = await instance.get(`/product/${id}`)
-            reset(res.data.data)
-            setImageUrl(res.data.data.image)
-            return res.data.data
+  const { data } = useQuery({
+    queryKey: ['PRODUCT_EDIT', id],
+    queryFn: async () => {
+      const {data} = await instance.get(`/product/${id}`);
+      form.setFieldsValue(data);
+      setImageUrl(data.image); 
+      return data;
+    },
+  });
+
+  const mutation = useMutation({
+    mutationFn: async (product: Product) => {
+      const {data} = await instance.put(`/product/${product._id}`, product);
+      return data;
+    },
+    onSuccess: () => {
+      message.success('Cập nhật thành công!');
+      navigate('/products');
+    },
+  });
+
+  const handleUpload = () => {
+    window.cloudinary.createUploadWidget(
+      {
+        cloudName: 'doikbjukg',
+        uploadPreset: 'Image1',
+      },
+      (error: any, result: any) => {
+        if (result && result.event === 'success') {
+          setImageUrl(result.info.secure_url);
+          form.setFieldValue('image', result.info.secure_url);
         }
-    })
+      }
+    ).open();
+  };
+
+  const onSubmit = (product: Product) => {
+    console.log(product);
     
-    const mutation = useMutation({
-        mutationFn: async (product: any) => {
-            const res = await instance.put(`/product/${product._id}`, product)
-            return res.data
-        },
-        onSuccess: () => {
-            alert("Cập nhật thành công!")
-            navigate('/products')
-        },
-    })
+    const productData = { ...product, image: imageUrl };
+    mutation.mutate(productData);
+  };
+  
+  return (
+    <div>
+      <section className="max-w-4xl p-6 mx-auto rounded-md shadow-md bg-white mt-20">
+        <h1 className="text-xl font-bold  capitalize text-black text-center mb-4">Cập Nhật Sản Phẩm</h1>
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={onSubmit}
+          initialValues={{ image: '' }}
+        >
+          <Form.Item
+            label="Danh mục"
+            name="category"
+            rules={[{ required: true, message: 'Vui lòng chọn danh mục!' }]}
+          >
+            <Select placeholder="Chọn danh mục">
+              {categories.map((item: any) => (
+                <Option key={item._id} value={item._id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
 
-    const handleUpload = () => {
-        window.cloudinary.createUploadWidget(
-        {
-            cloudName: 'doikbjukg',
-            uploadPreset: 'Image1', // Tạo upload preset trong dashboard của Cloudinary
-        },
-        (error: any, result: any) => {
-            if (result && result.event === 'success') {
-            setImageUrl(result.info.secure_url); // Lấy URL ảnh đã upload
-            }
-        }
-        ).open();
-    };
+          <Form.Item
+            label="Tên"
+            name="name"
+            rules={[{ required: true, message: 'Vui lòng nhập tên sản phẩm!' }]}
+          >
+            <Input placeholder="Tên sản phẩm" />
+          </Form.Item>
 
-    const onSubmit = (product: any) => {
-        const productData = { ...product, image: imageUrl };
-        mutation.mutate(productData)
-    }
+          <Form.Item
+            label="Nguyên liệu"
+            name="wareHouse"
+            rules={[{ required: true, message: 'Vui lòng chọn nguyên liệu!' }]}
+          >
+            <Select placeholder="Chọn nguyên liệu">
+              {ware.map((item: any) => (
+                <Option key={item._id} value={item._id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+              
+          <Form.Item
+            label="Số lượng"
+            name="count"
+            rules={[{ required: true, message: 'Vui lòng nhập số lượng!' }]}
+          >
+            <Input placeholder='Số lượng' />
+          </Form.Item>
 
-    return (
-        <div>
-            <section className="max-w-4xl p-6 mx-auto rounded-md shadow-md dark:bg-gray-800 mt-20">
-                <h1 className="text-xl font-bold text-white capitalize dark:text-white">Cập Nhật Sản Phẩm</h1>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
-                        <div>
-                            <label className="text-white dark:text-gray-200">Danh mục</label>
-                            <select {...register('category', { required: true })}>
-                                {categories?.map((item: any) => (
-                                    <option key={item._id} value={item._id}>{item.name}</option>
-                                ))}
-                            </select>
-                        </div>
+          <Form.Item
+            label="Đơn vị"
+            name="unit"
+            rules={[{ required: true, message: 'Vui lòng chọn đơn vị!' }]}
+          >
+            <Select placeholder="Chọn đơn vị">
+              {ware?.map((item: any) => (
+                <Option key={item._id} value={item.unit}>
+                  {item.unit}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
 
-                        
+          <Form.Item label="Ảnh" name="image">
+            <Button icon={<UploadOutlined />} onClick={handleUpload}>
+              Upload Image
+            </Button>
+            {imageUrl && (
+              <img
+                src={imageUrl}
+                alt="Uploaded"
+                style={{ width: '100px', marginTop: '10px' }}
+              />
+            )}
+          </Form.Item>
 
-                        <div>
-                            <label className="text-white dark:text-gray-200">Tên</label>
-                            <input
-                                type="text"
-                                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
-                                {...register('name', { required: true })}
-                            />
-                        </div>
-                        
-                        <div className="">
-                        <div>
-                            <label className="text-white dark:text-gray-200">Tên Nguyên liệu</label>
-                            <select {...register('wareHouse', { required: true })}>
-                                {ware?.map((item: any) => (
-                                    <option key={item._id} value={item._id}>{item.name}</option>
-                                ))}
-                            </select>
-                        </div>
+          <Form.Item
+            label="Giá"
+            name="price"
+            rules={[{ required: true, message: 'Vui lòng nhập giá!' }]}
+          >
+            <InputNumber min={0} placeholder="Giá" style={{ width: '100%' }} />
+          </Form.Item>
 
-                        <div>
-                            <label className="text-white dark:text-gray-200">Số lượng</label>
-                            <input
-                                type="number"
-                                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
-                                {...register('countInStock', { required: true })}
-                            />
-                        </div>
+          <Form.Item label="Discount" name="discount">
+            <Input placeholder="Giảm giá" />
+          </Form.Item>
 
-                        <div>
-                            <label className="text-white dark:text-gray-200">Đơn vị</label>
-                            <select {...register('unit', { required: true })}>
-                                {ware.map((item: any) => (
-                                    <option key={item._id} value={item.unit}>{item.unit}</option>
-                                ))}
-                            </select>
-                        </div>
-                        
-                        </div>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Lưu
+            </Button>
+          </Form.Item>
+        </Form>
+      </section>
+    </div>
+  );
+};
 
-                        <div>
-                            <label className="text-white dark:text-gray-200">Ảnh</label>
-                            <button type="button" onClick={handleUpload} className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
-                                Upload Image
-                            </button>
-                            {imageUrl && <img src={imageUrl} alt="Uploaded" style={{ width: '100px', marginTop: '10px' }} />}
-                        </div>
-
-                        <div>
-                            <label className="text-white dark:text-gray-200">Giá</label>
-                            <input
-                                type="number"
-                                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
-                                {...register('price', { required: true })}
-                            />
-                        </div>
-
-                        <div>
-                            <label className="text-white dark:text-gray-200">Discount</label>
-                            <input
-                                type="text"
-                                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
-                                {...register('discount')}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="flex justify-end mt-6">
-                        <button
-                            type="submit"
-                            className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600"
-                        >
-                            Lưu
-                        </button>
-                    </div>
-                </form>
-            </section>
-        </div>
-    )
-}
-
-export default ProductEdit
+export default ProductEdit;

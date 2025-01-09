@@ -3,7 +3,7 @@ import Ware from "../models/Ware";
 
 export const createProduct = async (req, res) => {
     try {
-        const {wareHouse, countInStock }= req.body
+        const {wareHouse, countInStock, count }= req.body
         const warehouseData = await Ware.findById(wareHouse);
         if (!warehouseData) {
             return res.status(404).json({ message: "Warehouse not found!" });
@@ -13,13 +13,22 @@ export const createProduct = async (req, res) => {
             return res.status(400).json({ message: "Not enough stock in the warehouse!" });
         }
 
+        if (count && warehouseData.countInStock < count) {
+            return res.status(400).json({ message: "Not enough stock in the warehouse for this product!" });
+        }
+
         // Cập nhật số lượng trong kho sau khi tạo sản phẩm mới
         if (countInStock) {
             warehouseData.countInStock -= countInStock;
             await warehouseData.save();
         }
 
-        const data = await Product.create({...req.body, wareHouse} );
+        if (count) {
+            warehouseData.countInStock -= count; // Giảm stock trong kho theo số lượng sản phẩm
+            await warehouseData.save();
+        }
+       
+        const data = await Product.create({...req.body, wareHouse, count} );
         if (!data) {
             return res.status(404).json({
               message: "Create failed!",
