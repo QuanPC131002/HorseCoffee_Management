@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import useOrder from '../hook/useOrder'
+import useOrder from '../../hook/useOrder'
 import { Link } from 'react-router-dom'
 
 const OrderDetail = () => {

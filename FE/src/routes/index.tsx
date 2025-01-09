@@ -12,8 +12,8 @@
   import WareEdit from "../components/WareHouse/WareEdit";
   import WareList from "../components/WareHouse/WareList";
   import LayoutAdmin from "../layout/Admin";
-  import OrderDetail from "../Order/OrderDetail";
-  import Order from "../Order/OrderList";
+  import OrderDetail from "../components/Order/OrderDetail";
+  import Order from "../components/Order/OrderList";
   import PrivateRoute from './PrivateRouter';
   import ResetPassword from '../components/Auth/ResetPassword';
   import ForgotPassword from '../components/Auth/ForgotPasswod';

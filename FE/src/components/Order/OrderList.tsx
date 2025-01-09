@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import useOrder from '../hook/useOrder'
+import useOrder from '../../hook/useOrder'
 
 const Order = () => {
   const { orders } = useOrder()

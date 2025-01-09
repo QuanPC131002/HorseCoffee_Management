@@ -6,6 +6,7 @@ import { useState } from 'react'
 import useCart from '../../hook/useCart'
 import { Link } from 'react-router-dom'
 import useOrder from '../../hook/useOrder'
+import { Pagination } from 'antd'
 
 const MenuAll = () => {
   const { data:categries = [] } = useCategories()
@@ -14,6 +15,13 @@ const MenuAll = () => {
   const { data, mutate, calculateTotal } = useCart()
   const [showTextarea, setShowTextarea] = useState(false)
   const [notes, setNotes] = useState('')
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(9);
+
+  const paginatedProducts = products.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   const handleCreateOrder = () => {
     const orderItem = data?.products || []
@@ -25,43 +33,59 @@ const MenuAll = () => {
     <div>
        <div className="grid grid-cols-[60%,1fr] p-6 gap-10">
           <div className="">
-            {/* Nav Categories */}
-              <div className="p-4">
-                {categries.map((item: any) => (
-                <button className='text-white p-4 bg-gray-300 mx-4 rounded-xl text-black font-semibold hover:bg-red-400 hover:text-white'>{item.name}</button>
-                
-              ))}
-              </div>
-            
-            {/* Products */}
-            <div className="grid grid-cols-3 gap-4">
-            {products.map((item: any) => (
-
-            <div className="bg-white p-1">
-              <img src={item.image} alt="" className='w-full'/>
-             <div className="flex justify-between my-1">
-              <p>{item.name}</p>
-              <span className='text-red-700'>{item.price}vnd</span>
-             </div>
-             <button
-              className="bg-red-500 w-full rounded-lg p-1 text-white hover:bg-gray-400"
-              onClick={() => {
-                mutate({
-                  action: 'add-to-cart',
-                  productId: item._id,
-                  quantity: 1,
-                  notes: notes || '' 
-                });
-              }}
-            >
-              Thêm
-            </button>
-
-
-            </div>
+          {/* Nav Categories */}
+          <div className="p-4">
+            {categries.map((item: any) => (
+              <button
+                key={item.id}
+                className="text-white p-4 bg-gray-300 mx-4 rounded-xl text-black font-semibold hover:bg-red-400 hover:text-white"
+              >
+                {item.name}
+              </button>
             ))}
           </div>
+
+          {/* Products */}
+          <div className="grid grid-cols-3 gap-4">
+            {paginatedProducts.map((item: any) => (
+              <div key={item._id} className="bg-white p-1">
+                <img src={item.image} alt="" className="w-full" />
+                <div className="flex justify-between my-1">
+                  <p>{item.name}</p>
+                  <span className="text-red-700">{item.price}vnd</span>
+                </div>
+                <button
+                  className="bg-red-500 w-full rounded-lg p-1 text-white hover:bg-gray-400"
+                  onClick={() => {
+                    mutate({
+                      action: 'add-to-cart',
+                      productId: item._id,
+                      quantity: 1,
+                      notes: notes || '',
+                    });
+                  }}
+                >
+                  Thêm
+                </button>
+              </div>
+            ))}
           </div>
+
+          {/* Pagination */}
+          <div className="flex justify-center mt-4">
+            <Pagination
+              current={currentPage}
+              pageSize={pageSize}
+              total={products.length}
+              onChange={(page, size) => {
+                setCurrentPage(page);
+                setPageSize(size || 9);
+              }}
+              showSizeChanger
+              pageSizeOptions={['6', '9', '12']}
+            />
+          </div>
+        </div>
           
            {/* Order */}
         <div className="bg-gray-300 rounded-xl">
