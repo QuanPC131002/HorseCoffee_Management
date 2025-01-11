@@ -8,6 +8,8 @@ import { Pagination } from 'antd'
 const WareList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(9);
+  const [searchQuery, setSearchQuery] = useState('')
+
   const query = useQueryClient()
   const { data, isLoading, isError } = useWareHouse(currentPage, pageSize) 
   const wareHouseList = data?.data || [];
@@ -33,6 +35,15 @@ const WareList = () => {
         setPageSize(size);
   };
   
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value)
+
+  }
+
+  const filteredWareHouse = wareHouseList.filter((item: any) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error fetching data</div>;
   return (
@@ -45,6 +56,15 @@ const WareList = () => {
               <div className="relative w-full px-4 max-w-full flex-grow flex-1">
                 <h3 className="font-semibold text-base text-blueGray-700">Danh Sách Kho</h3>
               </div>
+              <div className="">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    placeholder="Tìm kiếm nguyên liệu..."
+                    className="w-full px-4 py-2 border border-gray-300 rounded-2xl outline-none"
+                  />
+                </div>
               <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
                 <button className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
                   <Link to='/ware/add'>Thêm</Link>
@@ -76,7 +96,7 @@ const WareList = () => {
               </thead>
 
               <tbody>
-                {wareHouseList?.map((item: any, index: number) => (
+                {filteredWareHouse?.map((item: any, index: number) => (
                   <tr key={index}>
                     <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">
                       {item._id}
