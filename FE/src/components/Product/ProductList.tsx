@@ -2,10 +2,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import instance from '../../config/axios'
 import { useProduct } from '../../hook/product/useProduct'
+import { useState } from 'react'
+import { Pagination } from 'antd'
 
 const ProductList = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(9);
   const query = useQueryClient()
-  const { data, isLoading, isError } = useProduct() 
+  const { data, isLoading, isError } = useProduct(currentPage, pageSize) 
+  const productList = data?.data || [];
 
   const {mutate} = useMutation({
     mutationFn: async (id: number) => {
@@ -19,7 +24,12 @@ const ProductList = () => {
       })
     }
   })
+  const totalProducts = data?.pagination?.total || 0;
 
+  const handlePaginationChange = (page: any, size: any) => {
+        setCurrentPage(page);
+        setPageSize(size);
+  };
   
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error fetching data</div>;
@@ -65,7 +75,7 @@ const ProductList = () => {
                 </thead>
 
                 <tbody>
-                  {data.map((item: any, index: number) => (
+                  {productList.map((item: any, index: number) => (
                     <tr key={index}>
                       <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">
                         {item._id}
@@ -92,6 +102,15 @@ const ProductList = () => {
               </table>
             </div>
           </div>
+            {/* Pagination */}
+            <div className="flex justify-center mt-4">
+                <Pagination
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={totalProducts}
+                    onChange={handlePaginationChange}
+                />
+            </div>
         </div>
       </section>
 

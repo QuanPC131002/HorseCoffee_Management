@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query"
 import instance from "../../config/axios"
 
-export const useCategories = () => {
+export const useCategories = (page: any, limit: any) => {
     return useQuery({
-        queryKey: ['CATEGORIES'],
+        queryKey: ['CATEGORIES', page, limit],
         queryFn: async () => {
-          const res = await instance.get('/categories')
-          return res.data.data
+          const res = await instance.get('/categories', { params: { page, limit }})
+          return res.data
         }
       })
 }

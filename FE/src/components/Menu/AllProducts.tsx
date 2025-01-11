@@ -9,19 +9,24 @@ import useOrder from '../../hook/useOrder'
 import { Pagination } from 'antd'
 
 const MenuAll = () => {
-  const { data:categries = [] } = useCategories()
-  const { data:products  = [] } = useProduct()
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(9);
+
+  const { data:categories = [] } = useCategories(currentPage, pageSize)
+  const { data:products  = [] } = useProduct(currentPage, pageSize)
   const { createNewOrder} = useOrder() 
   const { data, mutate, calculateTotal } = useCart()
   const [showTextarea, setShowTextarea] = useState(false)
   const [notes, setNotes] = useState('')
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(9);
+  
+  const categoriesList = categories.data || []
+  const productList = products.data || [];
+  const totalProducts = products?.pagination?.total || 0;
 
-  const paginatedProducts = products.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
+  const handlePaginationChange = (page: any, size: any) => {
+        setCurrentPage(page);
+        setPageSize(size);
+  };
 
   const handleCreateOrder = () => {
     const orderItem = data?.products || []
@@ -35,7 +40,7 @@ const MenuAll = () => {
           <div className="">
           {/* Nav Categories */}
           <div className="p-4">
-            {categries.map((item: any) => (
+            {Array.isArray(categoriesList) && categoriesList?.map((item: any) => (
               <button
                 key={item.id}
                 className="text-white p-4 bg-gray-300 mx-4 rounded-xl text-black font-semibold hover:bg-red-400 hover:text-white"
@@ -47,7 +52,7 @@ const MenuAll = () => {
 
           {/* Products */}
           <div className="grid grid-cols-3 gap-4">
-            {paginatedProducts.map((item: any) => (
+            {Array.isArray(productList) && productList?.map((item: any) => (
               <div key={item._id} className="bg-white p-1">
                 <img src={item.image} alt="" className="w-full" />
                 <div className="flex justify-between my-1">
@@ -71,20 +76,15 @@ const MenuAll = () => {
             ))}
           </div>
 
-          {/* Pagination */}
-          <div className="flex justify-center mt-4">
-            <Pagination
-              current={currentPage}
-              pageSize={pageSize}
-              total={products.length}
-              onChange={(page, size) => {
-                setCurrentPage(page);
-                setPageSize(size || 9);
-              }}
-              showSizeChanger
-              pageSizeOptions={['6', '9', '12']}
-            />
-          </div>
+             {/* Pagination */}
+             <div className="flex justify-center mt-4">
+                <Pagination
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={totalProducts}
+                    onChange={handlePaginationChange}
+                />
+            </div>
         </div>
           
            {/* Order */}

@@ -49,7 +49,13 @@ export const createProduct = async (req, res) => {
 
 export const getAllProducts = async (req, res) => {
     try {
-        const data = await Product.find({})
+        const page = parseInt(req.query.page) || 1; // Trang hiện tại
+        const limit = parseInt(req.query.limit) || 9; // Số lượng sản phẩm trên mỗi trang
+        const skip = (page - 1) * limit; // Bỏ qua sản phẩm
+
+        const total = await Product.countDocuments(); // Tổng số sản phẩm
+
+        const data = await Product.find({}).skip(skip).limit(limit)
         if (!data) {
             return res.status(404).json({
               message: "No Products!",
@@ -58,6 +64,12 @@ export const getAllProducts = async (req, res) => {
         return res.status(200).json({
             message: "Successfully!",
             data,
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit),
+            },
         });   
     } catch (error) {
         return res.status(500).json({
