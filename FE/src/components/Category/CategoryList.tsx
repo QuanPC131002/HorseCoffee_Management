@@ -25,9 +25,9 @@ const CategoryList = () => {
     }
   })  
 
-  const totalProducts = data?.pagination?.total || 0;
+  const total = data?.pagination?.total || 0;
 
-  const handlePaginationChange = (page: any, size: any) => {
+  const handlePaginationChange = (page: number, size: number) => {
         setCurrentPage(page);
         setPageSize(size);
   };
@@ -103,7 +103,7 @@ const CategoryList = () => {
                 <Pagination
                     current={currentPage}
                     pageSize={pageSize}
-                    total={totalProducts}
+                    total={total}
                     onChange={handlePaginationChange}
                 />
           </div>

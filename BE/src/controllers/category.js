@@ -28,7 +28,7 @@ export const getAllCategory = async (req, res) => {
         const page = parseInt(req.query.page) || 1; 
         const limit = parseInt(req.query.limit) || 9; 
         const skip = (page - 1) * limit; 
-        const total = await Product.countDocuments(); 
+        const total = await Category.countDocuments(); 
       
         const data = await Category.find({}).skip(skip).limit(limit)
         if(!data){

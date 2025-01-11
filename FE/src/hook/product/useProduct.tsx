@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import instance from "../../config/axios"
 
-export const useProduct = ( page: any, limit: any) => {
+export const useProduct = ( page: number, limit: number) => {
     return useQuery({
         queryKey: ['PRODUCT', page, limit],
         queryFn: async () => {

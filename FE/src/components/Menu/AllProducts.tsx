@@ -14,7 +14,7 @@ const MenuAll = () => {
 
   const { data:categories = [] } = useCategories(currentPage, pageSize)
   const { data:products  = [] } = useProduct(currentPage, pageSize)
-  const { createNewOrder} = useOrder() 
+  const { createNewOrder} = useOrder(currentPage, pageSize) 
   const { data, mutate, calculateTotal } = useCart()
   const [showTextarea, setShowTextarea] = useState(false)
   const [notes, setNotes] = useState('')
@@ -23,7 +23,7 @@ const MenuAll = () => {
   const productList = products.data || [];
   const totalProducts = products?.pagination?.total || 0;
 
-  const handlePaginationChange = (page: any, size: any) => {
+  const handlePaginationChange = (page: number, size: number) => {
         setCurrentPage(page);
         setPageSize(size);
   };

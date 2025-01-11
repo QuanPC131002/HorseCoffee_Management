@@ -25,7 +25,12 @@ export const createWareHouse = async (req, res) => {
 
 export const getAllWareHouse = async (req, res) => {
     try {
-        const data = await Ware.find({})
+        const page = parseInt(req.query.page) || 1; 
+        const limit = parseInt(req.query.limit) || 9; 
+        const skip = (page - 1) * limit; 
+        const total = await Ware.countDocuments(); 
+
+        const data = await Ware.find({}).skip(skip).limit(limit)
         if(!data){
             return res.status(404).json({
               message: "Get All WareHouse failed!",
@@ -35,6 +40,12 @@ export const getAllWareHouse = async (req, res) => {
         return res.status(200).json({
             message: "Successfully!",
             data,
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit),
+            },
         });
     } catch (error) {
         return res.status(500).json({

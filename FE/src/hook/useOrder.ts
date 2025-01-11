@@ -4,7 +4,7 @@ import instance from '../config/axios'
 import { useLocalStorage } from './useStorage'
 import { useParams } from 'react-router-dom'
 
-const useOrder = () => {
+const useOrder = (page: number, limit: number) => {
   const [user] = useLocalStorage('user', {})
   
   const userId = user?.user?._id
@@ -13,14 +13,17 @@ const useOrder = () => {
 
   const queryClient = useQueryClient()
   
-  const { data: orders } = useQuery({
-    queryKey: ['order'],
+  
+  const { data: orders} = useQuery({
+    queryKey: ['order', page, limit],
     queryFn: async () => {
-      const { data } = await instance.get(`/order/`)
-      return data
+      const { data } = await instance.get(`/order/`, { params: { page, limit } })
+      return data 
     },
   })
 
+  const orderList = orders?.order || [];
+  const pagination = orders?.pagination
 
   const { data: orderDetail } = useQuery({
     queryKey: ['order_detail', userId, orderId],
@@ -75,13 +78,15 @@ const useOrder = () => {
   // Lấy đơn hàng mới nhất
   const latestOrder = orders && orders.length > 0 ? orders[orders.length - 1] : null
 
-  return {
-    orders,
-    orderDetail,
-    updateOrderStatus,
-    latestOrder,
-    createNewOrder
-  }
+    return {
+      orders,
+      orderList,
+      pagination,
+      orderDetail,
+      updateOrderStatus,
+      latestOrder,
+      createNewOrder
+    }
 }
 
 export default useOrder
