@@ -140,3 +140,18 @@ export const removeProduct = async (req, res) => {
         });
     }
 }
+
+export const related = async (req, res) => {
+    try {
+        const products = await Product.find({
+            category: req.params.categoryId,
+        });
+  
+      return res.status(200).json(products);
+    } catch (error) {
+        return res.status(500).json({
+            name: error.name || "Error",
+            message: error.message || "Server error",
+        });
+    }
+};

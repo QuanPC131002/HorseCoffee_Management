@@ -1,24 +1,24 @@
   import { Route, Routes } from 'react-router-dom';
-  import Login from "../components/Auth/Login";
-  import Register from "../components/Auth/Register";
-  import CategoryAdd from "../components/Category/CategoryAdd";
-  import CategoryEdit from "../components/Category/CategoryEdit";
-  import CategoryList from "../components/Category/CategoryList";
-  import MenuAll from "../components/Menu/AllProducts";
-  import ProductAdd from "../components/Product/ProductAdd";
-  import ProductEdit from "../components/Product/ProductEdit";
-  import ProductList from "../components/Product/ProductList";
-  import WareAdd from "../components/WareHouse/WareAdd";
-  import WareEdit from "../components/WareHouse/WareEdit";
-  import WareList from "../components/WareHouse/WareList";
-  import LayoutAdmin from "../layout/Admin";
-  import OrderDetail from "../components/Order/OrderDetail";
-  import Order from "../components/Order/OrderList";
-  import PrivateRoute from './PrivateRouter';
-  import ResetPassword from '../components/Auth/ResetPassword';
-  import ForgotPassword from '../components/Auth/ForgotPasswod';
-import LayoutProfile from '../components/Auth/Profile/LayoutProfile';
+import ForgotPassword from '../components/Auth/ForgotPasswod';
+import Login from "../components/Auth/Login";
 import ChangePassword from '../components/Auth/Profile/ChangePassword';
+import LayoutProfile from '../components/Auth/Profile/LayoutProfile';
+import Register from "../components/Auth/Register";
+import ResetPassword from '../components/Auth/ResetPassword';
+import CategoryAdd from "../components/Category/CategoryAdd";
+import CategoryEdit from "../components/Category/CategoryEdit";
+import CategoryList from "../components/Category/CategoryList";
+import MenuAll from "../components/Menu/AllProducts";
+import OrderDetail from "../components/Order/OrderDetail";
+import Order from "../components/Order/OrderList";
+import ProductAdd from "../components/Product/ProductAdd";
+import ProductEdit from "../components/Product/ProductEdit";
+import ProductList from "../components/Product/ProductList";
+import WareAdd from "../components/WareHouse/WareAdd";
+import WareEdit from "../components/WareHouse/WareEdit";
+import WareList from "../components/WareHouse/WareList";
+import LayoutAdmin from "../layout/Admin";
+import PrivateRoute from './PrivateRouter';
 
   const IndexRouter = () => {
     return (
@@ -27,7 +27,6 @@ import ChangePassword from '../components/Auth/Profile/ChangePassword';
           <Route path='/' element={<LayoutAdmin />}>
             <Route path='menu'>
               <Route index element={<PrivateRoute element={<MenuAll />} />} />
-              {/* <Route path="checkout" element={<Checkout />} /> */}
             </Route>
             <Route path='categories'>
               <Route index element={<PrivateRoute element={<CategoryList />} />} />
