@@ -1,42 +1,36 @@
+import mongoose from "mongoose";
 import Product from "../models/Product"
 import Ware from "../models/Ware";
 
 export const createProduct = async (req, res) => {
     try {
-        const {wareHouse, countInStock, count }= req.body
-        const warehouseData = await Ware.findById(wareHouse);
-        if (!warehouseData) {
-            return res.status(404).json({ message: "Warehouse not found!" });
+        const { ingredients } = req.body;
+        if (ingredients && ingredients.length > 0) {
+            for (const ingredient of ingredients) {
+                const warehouseIngredient = await Ware.findById(ingredient.wareHouse);
+                if (!warehouseIngredient) {
+                    return res.status(404).json({ message: `Ingredient warehouse ${ingredient.wareHouse} not found!` });
+                }
+
+                if (warehouseIngredient.countInStock < ingredient.count) {
+                    return res.status(400).json({
+                        message: `Not enough stock for ingredient ${ingredient.name} in warehouse!`,
+                    });
+                }
+
+                warehouseIngredient.countInStock -= ingredient.count;
+                await warehouseIngredient.save();
+            }
         }
 
-        if (countInStock && warehouseData.countInStock < countInStock) {
-            return res.status(400).json({ message: "Not enough stock in the warehouse!" });
+        const productData = await Product.create(req.body);
+        if (!productData) {
+            return res.status(404).json({ message: "Create failed!" });
         }
 
-        if (count && warehouseData.countInStock < count) {
-            return res.status(400).json({ message: "Not enough stock in the warehouse for this product!" });
-        }
-
-        // Cập nhật số lượng trong kho sau khi tạo sản phẩm mới
-        if (countInStock) {
-            warehouseData.countInStock -= countInStock;
-            await warehouseData.save();
-        }
-
-        if (count) {
-            warehouseData.countInStock -= count; // Giảm stock trong kho theo số lượng sản phẩm
-            await warehouseData.save();
-        }
-       
-        const data = await Product.create({...req.body, wareHouse, count} );
-        if (!data) {
-            return res.status(404).json({
-              message: "Create failed!",
-            });
-        }
         return res.status(200).json({
             message: "Successfully!",
-            data,
+            data: productData,
         });
     } catch (error) {
         return res.status(500).json({
@@ -44,16 +38,16 @@ export const createProduct = async (req, res) => {
             message: error.message || "Server error",
         });
     }
-    
-}
+};
+
 
 export const getAllProducts = async (req, res) => {
     try {
-        const page = parseInt(req.query.page) || 1; // Trang hiện tại
-        const limit = parseInt(req.query.limit) || 9; // Số lượng sản phẩm trên mỗi trang
-        const skip = (page - 1) * limit; // Bỏ qua sản phẩm
+        const page = parseInt(req.query.page) || 1; 
+        const limit = parseInt(req.query.limit) || 9; 
+        const skip = (page - 1) * limit;
 
-        const total = await Product.countDocuments(); // Tổng số sản phẩm
+        const total = await Product.countDocuments(); 
 
         const data = await Product.find({}).skip(skip).limit(limit)
         if (!data) {
@@ -81,8 +75,8 @@ export const getAllProducts = async (req, res) => {
 
 export const getOneProduct = async (req, res) => {
     try {
-        const products = await Product.find().populate("warehouse", "name unit countInStock");
-
+        const products = await Product.find().populate("ingredients.warehouse", "name unit countInStock");
+        
         const data = await Product.findById(req.params.id)
         if (!data) {
             return res.status(404).json({

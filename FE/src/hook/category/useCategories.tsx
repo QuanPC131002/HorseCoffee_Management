@@ -6,7 +6,7 @@ export const useCategories = (page: number, limit: number) => {
         queryKey: ['CATEGORIES', page, limit],
         queryFn: async () => {
           const res = await instance.get('/categories', { params: { page, limit }})
-          return res.data
+          return res.data.data
         }
       })
 }

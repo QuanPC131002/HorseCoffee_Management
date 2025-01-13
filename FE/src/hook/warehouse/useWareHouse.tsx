@@ -6,7 +6,7 @@ export const useWareHouse = (page: number, limit: number) => {
         queryKey: ['WareHouse', page, limit],
         queryFn: async () => {
           const res = await instance.get('/ware', { params: { page, limit}})
-          return res.data
+          return res.data.data
         }
       })
 }

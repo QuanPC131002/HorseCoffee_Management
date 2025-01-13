@@ -12,7 +12,7 @@ const WareList = () => {
 
   const query = useQueryClient()
   const { data, isLoading, isError } = useWareHouse(currentPage, pageSize) 
-  const wareHouseList = data?.data || [];
+  const wareHouseList = data || [];
 
   const {mutate} = useMutation({
     mutationFn: async (id: number) => {

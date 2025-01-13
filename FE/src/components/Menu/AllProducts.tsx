@@ -21,7 +21,7 @@ const MenuAll = () => {
   const [showTextarea, setShowTextarea] = useState(false);
   const [notes, setNotes] = useState('');
 
-  const categoriesList = categories.data || [];
+  const categoriesList = categories || [];
   const productList = products?.data || [];
 
   const filteredProducts = selectedCategory

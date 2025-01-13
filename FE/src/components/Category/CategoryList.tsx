@@ -11,7 +11,7 @@ const CategoryList = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const query = useQueryClient()
   const { data, isLoading, isError } = useCategories(currentPage, pageSize) 
-  const categoriesList = data?.data || [];
+  const categoriesList = data || [];
 
   const {mutate} = useMutation({
     mutationFn: async (id: number) => {
