@@ -51,7 +51,8 @@ const ProductAdd = () => {
     }
 
     const ingredient = {
-      key:selectedWare._id,
+      id:selectedWare._id,
+      wareHouse: selectedWare._id,
       name: selectedWare.name,
       count: count,
       unit: selectedUnit,
@@ -69,10 +70,7 @@ const ProductAdd = () => {
       image: imageUrl, 
       ingredients: ingredients,
     };
-
-    delete productData.wareHouse;
-    delete productData.count;
-
+    
     mutation.mutate(productData);
   };
 
@@ -99,7 +97,7 @@ const ProductAdd = () => {
         <Button
           danger
           onClick={() => {
-            setIngredients(ingredients.filter(item => item.key !== record.key));
+            setIngredients(ingredients.filter(item => item.id !== record.id));
           }}
         >
           Xóa
@@ -142,7 +140,7 @@ const ProductAdd = () => {
             label="Danh Sách Nguyên Liệu"
             name="wareHouse"
             style={{ flex: 1 }}
-            rules={[{ required: true, message: 'Vui lòng chọn nguyên liệu!' }]}>
+            >
             <Select
               placeholder="Chọn nguyên liệu"
               value={selectedWare?._id}
@@ -159,7 +157,7 @@ const ProductAdd = () => {
             label="Số lượng"
             name="count"
             style={{ flex: 1 }}
-            rules={[{ required: true, message: 'Vui lòng nhập số lượng!' }]}>
+            >
             <InputNumber
               min={1}
               value={count}
@@ -169,6 +167,18 @@ const ProductAdd = () => {
             />
           </Form.Item>
 
+          <Form.Item
+            label="Đơn vị"
+            name="unit"
+            style={{ flex: 1 }}
+            >
+            <Input
+              min={1}
+              value={selectedUnit}
+              style={{ width: '100%' }}
+              placeholder="Nhập đơn vị"
+            />
+          </Form.Item>
           <Button
             type="primary"
             style={{ alignSelf: 'flex-end' }}
@@ -180,7 +190,7 @@ const ProductAdd = () => {
         <Table
           dataSource={ingredients}
           columns={columns}
-          rowKey="key"
+          rowKey="id"
           pagination={false}
           style={{ marginBottom: '20px' }}
         />

@@ -5,8 +5,15 @@ import Ware from "../models/Ware";
 export const createProduct = async (req, res) => {
     try {
         const { ingredients } = req.body;
+
+        
+        const updatedWarehouses = [];
+
         if (ingredients && ingredients.length > 0) {
             for (const ingredient of ingredients) {
+                if (!ingredient.wareHouse) {
+                    return res.status(400).json({ message: "Ingredient warehouse is required!" });
+                }
                 const warehouseIngredient = await Ware.findById(ingredient.wareHouse);
                 if (!warehouseIngredient) {
                     return res.status(404).json({ message: `Ingredient warehouse ${ingredient.wareHouse} not found!` });
@@ -18,19 +25,26 @@ export const createProduct = async (req, res) => {
                     });
                 }
 
-                warehouseIngredient.countInStock -= ingredient.count;
-                await warehouseIngredient.save();
+                updatedWarehouses.push({
+                    warehouseIngredient,
+                    count: ingredient.count,
+                });
             }
         }
 
-        const productData = await Product.create(req.body);
-        if (!productData) {
+        const data = await Product.create(req.body);
+        if (!data) {
             return res.status(404).json({ message: "Create failed!" });
+        }
+
+        for (const { warehouseIngredient, count } of updatedWarehouses) {
+            warehouseIngredient.countInStock -= count;
+            await warehouseIngredient.save();
         }
 
         return res.status(200).json({
             message: "Successfully!",
-            data: productData,
+            data: data,
         });
     } catch (error) {
         return res.status(500).json({
@@ -39,6 +53,7 @@ export const createProduct = async (req, res) => {
         });
     }
 };
+
 
 
 export const getAllProducts = async (req, res) => {
@@ -98,12 +113,76 @@ export const getOneProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
     try {
-        const data = await Product.findByIdAndUpdate({ _id: req.params.id}, req.body, { new: true })
-        if(!data){
+        const { ingredients } = req.body;
+
+        const product = await Product.findById(req.params.id).populate("ingredients.wareHouse");
+        if (!product) {
+            return res.status(404).json({ message: "Product not found!" });
+        }
+
+        const initialIngredients = product.ingredients || [];
+        const updatedWarehouses = [];
+        const restoredWarehouses = [];
+
+        if (ingredients && ingredients.length > 0) {
+            for (const ingredient of ingredients) {
+                if (!ingredient.wareHouse) {
+                    return res.status(400).json({ message: "Ingredient warehouse is required!" });
+                }
+                const warehouseIngredient = await Ware.findById(ingredient.wareHouse);
+                if (!warehouseIngredient) {
+                    return res.status(404).json({ message: `Ingredient warehouse ${ingredient.wareHouse} not found!` });
+                }
+
+                const existingIngredient = initialIngredients.find(
+                    (item) => item.wareHouse.toString() === ingredient.wareHouse
+                );
+
+                if (existingIngredient) {
+                    // Nếu nguyên liệu đã tồn tại, tính chênh lệch số lượng
+                    const diff = ingredient.count - existingIngredient.count;
+                    if (diff > 0 && warehouseIngredient.countInStock < diff) {
+                        return res.status(400).json({
+                            message: `Not enough stock for ingredient ${ingredient.name} in warehouse!`,
+                        });
+                    }
+                    warehouseIngredient.countInStock -= diff;
+                } else {
+                    // Nguyên liệu mới
+                    if (warehouseIngredient.countInStock < ingredient.count) {
+                        return res.status(400).json({
+                            message: `Not enough stock for ingredient ${ingredient.name} in warehouse!`,
+                        });
+                    }
+                    warehouseIngredient.countInStock -= ingredient.count;
+                }
+
+                updatedWarehouses.push(warehouseIngredient);
+            }
+        }
+
+        // Xử lý nguyên liệu bị xóa
+        for (const ingredient of initialIngredients) {
+            if (!ingredients.find((item) => item.wareHouse.toString() === ingredient.wareHouse.toString())) {
+                const warehouseIngredient = await Ware.findById(ingredient.wareHouse);
+                if (warehouseIngredient) {
+                    warehouseIngredient.countInStock += ingredient.count;
+                    restoredWarehouses.push(warehouseIngredient);
+                }
+            }
+        }
+
+        const data = await Product.findByIdAndUpdate({ _id: req.params.id }, req.body, { new: true });
+        if (!data) {
             return res.status(404).json({
-              message: "Update Product failed!",
+                message: "Update Product failed!",
             });
-          }
+        }
+
+        for (const warehouse of [...updatedWarehouses, ...restoredWarehouses]) {
+            await warehouse.save();
+        }
+
         return res.status(200).json({
             message: "Successfully!",
             data,
@@ -114,7 +193,8 @@ export const updateProduct = async (req, res) => {
             message: error.message || "Server error",
         });
     }
-}
+};
+
 
 export const removeProduct = async (req, res) => {
     try {

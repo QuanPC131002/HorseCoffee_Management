@@ -89,7 +89,7 @@ const MenuAll = () => {
           </div>
 
           {/* Products */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-5 gap-4">
             {Array.isArray(filteredProducts) &&
               filteredProducts?.map((item) => (
                 <div key={item._id} className="bg-white p-1">
@@ -121,7 +121,7 @@ const MenuAll = () => {
           {selectedCategory && !isLoadingRelatedProduct && (
             <div className="mt-6">
               {Array.isArray(relatedProduct) && relatedProduct.length > 0 ? (
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-5 gap-4">
                   {relatedProduct.map((item) => (
                     <div key={item._id} className="bg-white p-1">
                       <img src={item.image} alt={item.name} className="w-full" />
