@@ -1,8 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { Avatar, Button, Card, Layout, Typography } from 'antd';
-import React from 'react'
-import { useForm } from 'react-hook-form';
-import { data, Link } from 'react-router-dom';
+import { Avatar, Card, Layout, Typography } from 'antd';
+import { Link } from 'react-router-dom';
 import instance from '../../../config/axios';
 import { useLocalStorage } from '../../../hook/useStorage';
 

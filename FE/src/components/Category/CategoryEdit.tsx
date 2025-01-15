@@ -17,7 +17,7 @@ const CategoryEdit = () => {
     })
     const mutation = useMutation({
         mutationFn: async (cate: any) => {
-            const res = await instance.put(`/categories/${cate._id}`, cate)
+            const res = await instance.put(`/categories/${id}`, cate)
             return res.data
         },
         onSuccess: () => {
@@ -32,7 +32,7 @@ const CategoryEdit = () => {
   return (
     <div>
       <section className="max-w-4xl p-6 mx-auto  rounded-md shadow-md bg-white mt-20">
-        <h1 className="text-xl font-bold text-black capitalize text-center mb-4">Thêm Mới Danh Mục</h1>
+        <h1 className="text-xl font-bold text-black capitalize text-center mb-4">Cập Nhật Danh Mục</h1>
         <Form
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 14 }}

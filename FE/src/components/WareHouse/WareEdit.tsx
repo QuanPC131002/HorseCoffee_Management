@@ -20,7 +20,7 @@ const WareEdit = () => {
 
   const mutation = useMutation({
     mutationFn: async (ware: any) => {
-      const res = await instance.put(`/ware/${ware._id}`, ware)
+      const res = await instance.put(`/ware/${id}`, ware)
       return res.data
     },
     onSuccess: () => {
@@ -30,14 +30,12 @@ const WareEdit = () => {
   })
 
   const onSubmit = (ware: any) => {
-    console.log(ware);
-    
     mutation.mutate(ware)
   }
 
   return (
     <div>
-      <section className="max-w-4xl p-6 mx-auto rounded-md shadow-md dark:bg-gray-800 mt-20">
+      <section className="max-w-4xl p-6 mx-auto rounded-md shadow-md bg-white mt-20">
         <h1 className="text-xl font-bold text-black capitalize text-center mb-4">Cập Nhật Kho</h1>
         <Form
           form={form}

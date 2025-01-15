@@ -46,28 +46,62 @@ const DashBoard = () => {
         <div className="p-4 ">
           <img src={Logo} alt="" className='w-[90px] m-auto rounded-full'/>
         </div>
-      <div className="mt-10 mb-10">
-        <div className="p-4 text-center my-10">
-            <Link to='/menu'><FontAwesomeIcon icon={faPenToSquare} className='h-[20px] mx-2'/>Đặt Hàng</Link>
-          </div>
-          <div className="p-4 text-center my-10">
-            <Link to='/products'><FontAwesomeIcon icon={faBars} className='h-[20px] mx-2'/>Quản Lí Sản Phẩm</Link>
-          </div>
-          <div className="p-4 text-center my-10">
-            <Link to='/categories'><FontAwesomeIcon icon={faFolder} className='h-[20px] mx-2'/>Quản Lí Danh Mục</Link>
-          </div>
-          <div className="p-4 text-center my-10">
-            <Link to='/ware'><FontAwesomeIcon icon={faWarehouse} className='h-[20px] mx-2'/>Kho Nguyên Liệu</Link>
-          </div>
-          <div className="p-4 text-center my-10">
-            <Link to='/order'><FontAwesomeIcon icon={faCartShopping} className='h-[20px] mx-2'/>Quản Lí Đơn Hàng</Link>
-          </div>
-          <div className="p-4 text-center my-20">
-          <Button danger onClick={handleLogout}>
-              {confirmLogout ? "Xác nhận" : "Đăng xuất"}
-            </Button>
+        <div className="mt-10 mb-10">
+        <div className="p-4 text-center my-4">
+          <div
+            className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
+            onClick={() => navigate('/menu')}
+          >
+            <FontAwesomeIcon icon={faPenToSquare} className="h-[20px] mx-2" />
+            Đặt Hàng
           </div>
         </div>
+        <div className="p-4 text-center my-4">
+          <div
+            className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
+            onClick={() => navigate('/products')}
+          >
+            <FontAwesomeIcon icon={faBars} className="h-[20px] mx-2" />
+            Quản Lí Sản Phẩm
+          </div>
+        </div>
+        <div className="p-4 text-center my-4">
+          <div
+            className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
+            onClick={() => navigate('/categories')}
+          >
+            <FontAwesomeIcon icon={faFolder} className="h-[20px] mx-2" />
+            Quản Lí Danh Mục
+          </div>
+        </div>
+        <div className="p-4 text-center my-4">
+          <div
+            className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
+            onClick={() => navigate('/ware')}
+          >
+            <FontAwesomeIcon icon={faWarehouse} className="h-[20px] mx-2" />
+            Kho Nguyên Liệu
+          </div>
+        </div>
+        <div className="p-4 text-center my-4">
+          <div
+            className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
+            onClick={() => navigate('/order')}
+          >
+            <FontAwesomeIcon icon={faCartShopping} className="h-[20px] mx-2" />
+            Quản Lí Đơn Hàng
+          </div>
+        </div>
+        <div className="p-4 text-center my-8">
+          <div
+            className="w-full flex justify-center items-center p-4 border border-red-300 rounded-lg cursor-pointer hover:bg-red-500 text-black"
+            onClick={handleLogout}
+          >
+            {confirmLogout ? "Xác nhận" : "Đăng xuất"}
+          </div>
+        </div>
+        </div>
+
       </div>
       <div className="bg-gray-600">
         {/* Sidebar */}

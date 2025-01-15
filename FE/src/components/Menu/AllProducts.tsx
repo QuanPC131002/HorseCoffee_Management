@@ -1,6 +1,6 @@
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Pagination } from 'antd';
+import { Button, Card, Col, Pagination, Row } from 'antd';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCategories } from '../../hook/category/useCategories';
@@ -60,23 +60,26 @@ const MenuAll = () => {
     const totalPrice = calculateTotal();
     const status = 'Processing';
     createNewOrder(orderItem, totalPrice, status, notes);
+   
   };
 
+  
+  const isCartEmpty = !data?.products || data.products.length === 0;
   return (
     <div>
       <div className="grid grid-cols-[60%,1fr] p-6 gap-10">
         <div className="">
           {/* Nav Categories */}
           <div className="p-4">
-          <button
+          <Button
               className="text-white p-4 bg-gray-300 mx-4 rounded-xl text-black font-semibold hover:bg-red-400 hover:text-white"
               onClick={handleAllProductsClick}
             >
               Tất Cả
-            </button>
+            </Button>
             {Array.isArray(categoriesList) &&
               categoriesList.map((item) => (
-                <button
+                <Button
                   key={item._id}
                   className="text-white p-4 bg-gray-300 mx-4 rounded-xl text-black font-semibold hover:bg-red-400 hover:text-white"
                   onClick={() => {
@@ -84,53 +87,27 @@ const MenuAll = () => {
                   }}
                 >
                   {item.name}
-                </button>
+                </Button>
               ))}
           </div>
 
           {/* Products */}
-          <div className="grid grid-cols-5 gap-4">
-            {Array.isArray(filteredProducts) &&
-              filteredProducts?.map((item) => (
-                <div key={item._id} className="bg-white p-1">
-                  <img src={item.image} alt="" className="w-full" />
-                  <div className="flex justify-between my-1">
-                    <p>{item.name}</p>
-                    <span className="text-red-700">{item.price}vnd</span>
-                  </div>
-                  <button
-                    className="bg-red-500 w-full rounded-lg p-1 text-white hover:bg-gray-400"
-                    onClick={() => {
-                      mutate({
-                        action: 'add-to-cart',
-                        productId: item._id,
-                        quantity: 1,
-                        notes: notes || '',
-                      });
-                    }}
-                  >
-                    Thêm
-                  </button>
-                </div>
-              ))}
-          </div>
-
-         
-
-          {/* Related Products */}
-          {selectedCategory && !isLoadingRelatedProduct && (
-            <div className="mt-6">
-              {Array.isArray(relatedProduct) && relatedProduct.length > 0 ? (
-                <div className="grid grid-cols-5 gap-4">
-                  {relatedProduct.map((item) => (
-                    <div key={item._id} className="bg-white p-1">
-                      <img src={item.image} alt={item.name} className="w-full" />
-                      <div className="flex justify-between my-1">
-                        <p>{item.name}</p>
-                        <span className="text-red-700">{item.price} vnd</span>
+          <div className="p-4">
+            <Row gutter={[12, 12]}>
+              {Array.isArray(filteredProducts) &&
+                filteredProducts?.map((item) => (
+                  <Col key={item._id} span={6}> {/* Chiều rộng cột cho mỗi sản phẩm */}
+                    <Card
+                      hoverable
+                      cover={<img alt={item.name} src={item.image} style={{ objectFit: 'cover', height: '200px', width: '100%' }} />}
+                      className="bg-white"
+                    >
+                      <div className="flex justify-between mb-2 items-center">
+                        <p className='truncate'>{item.name}</p>
+                        <span className="text-red-700 whitespace-nowrap">{item.price} vnd</span>
                       </div>
-                      <button
-                        className="bg-red-500 w-full rounded-lg p-1 text-white hover:bg-gray-400"
+                      <Button
+                        className="w-full mt-auto"
                         onClick={() => {
                           mutate({
                             action: 'add-to-cart',
@@ -141,14 +118,56 @@ const MenuAll = () => {
                         }}
                       >
                         Thêm
-                      </button>
-                    </div>
-                  ))}
-                </div>
+                      </Button>
+                    </Card>
+                  </Col>
+                ))}
+            </Row>
+          </div>
+
+         
+
+          {/* Related Products */}
+          {selectedCategory && !isLoadingRelatedProduct && (
+            <Row gutter={[12, 12]}>
+              {Array.isArray(relatedProduct) && relatedProduct.length > 0 ? (
+                relatedProduct.map((item) => (
+                  <Col key={item._id} span={6}>
+                    <Card
+                      hoverable
+                      cover={
+                        <img
+                          alt={item.name}
+                          src={item.image}
+                          style={{ objectFit: 'cover', height: '200px', width: '100%' }}
+                        />
+                      }
+                      className="bg-white"
+                    >
+                      <div className="flex justify-between mb-2 items-center">
+                        <p className="truncate">{item.name}</p>
+                        <span className="text-red-700 whitespace-nowrap">{item.price} vnd</span>
+                      </div>
+                      <Button
+                        className="w-full mt-auto"
+                        onClick={() => {
+                          mutate({
+                            action: 'add-to-cart',
+                            productId: item._id,
+                            quantity: 1,
+                            notes: notes || '',
+                          });
+                        }}
+                      >
+                        Thêm
+                      </Button>
+                    </Card>
+                  </Col>
+                ))
               ) : (
-                <p className='text-white font-bold text-center'>Không có sản phẩm</p>
+                <p className="text-white font-bold text-center">Không có sản phẩm</p>
               )}
-            </div>
+            </Row>
           )}
 
            {/* Pagination */}
@@ -237,17 +256,21 @@ const MenuAll = () => {
               Tổng giá: <span className="text-red-600">{calculateTotal()} vnd</span>
             </p>
             <div className="flex justify-end">
-              <button className="bg-green-700 text-white p-2 rounded-lg" onClick={handleCreateOrder}>
+            <button className={`p-2 rounded-lg ${isCartEmpty ? 'bg-gray-400 text-gray-600 cursor-not-allowed' : 'bg-green-700 text-white'}`} onClick={handleCreateOrder} disabled={isCartEmpty}>
+              {!isCartEmpty ? (
                 <Link to="/order">Thanh toán</Link>
-              </button>
+              ) : (
+                'Thanh toán'
+              )}
+            </button>
               <button
-                className="bg-blue-700 text-white p-2 rounded-lg mx-2"
+                className={`p-2 rounded-lg ${isCartEmpty ? 'bg-gray-400 text-gray-600 cursor-not-allowed' : 'bg-blue-700 text-white'}`}
                 onClick={() => setShowTextarea(!showTextarea)}
               >
                 Ghi Chú
               </button>
             </div>
-            {showTextarea && (
+            {showTextarea && !isCartEmpty && (
               <textarea
                 className="w-full mt-4 p-2 border border-gray-300 rounded-lg"
                 rows={3}

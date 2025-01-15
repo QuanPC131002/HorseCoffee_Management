@@ -3,7 +3,7 @@ import useOrder from '../../hook/useOrder'
 import { Link } from 'react-router-dom'
 
 const OrderDetail = () => {
-  const { orderDetail, updateOrderStatus } = useOrder()
+  const { orderDetail, updateOrderStatus } = useOrder(1, 9)
   const [status, setStatus] = useState('')
 
   const handleStatusChange = (newStatus: string) => {

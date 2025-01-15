@@ -66,13 +66,16 @@ const useOrder = (page: number, limit: number) => {
         icon: 'success',
         confirmButtonText: 'OK'
       });
+      queryClient.invalidateQueries({
+        queryKey: ['cart', userId]
+      });
     },
+    
   })
 
   const createNewOrder = async (orderItem: string, totalPrice: number, status: string, notes: string) => {
     const orderDate = new Date().toISOString()
     createOrder({ orderItem, totalPrice, status, notes, orderDate })
-    
   }
 
   // Lấy đơn hàng mới nhất

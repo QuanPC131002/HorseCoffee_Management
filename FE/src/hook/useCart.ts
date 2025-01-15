@@ -8,7 +8,7 @@ const useCart = () => {
 
     const userId = user?.user?._id
 
-    const { data, refetch } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ['cart', userId],
         queryFn: async () => {
             const {data} = await instance.get(`cart/${userId}`)
@@ -62,10 +62,9 @@ const useCart = () => {
             queryClient.invalidateQueries({
                 queryKey: ['cart', userId]
             });
-            refetch()
             if (action === 'add-to-cart') {
                 toast.success('Thêm thành công')
-            }
+            } 
         }
     })
 
@@ -76,7 +75,8 @@ const useCart = () => {
   return {
     data,
     mutate,
-    calculateTotal
+    calculateTotal,
+    isLoading
   }
 }
 

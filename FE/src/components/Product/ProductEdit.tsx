@@ -28,8 +28,6 @@ const ProductEdit = () => {
 
       form.setFieldsValue(res.data.data);
       setImageUrl(res.data.data.image);
-      console.log(res.data.data.image);
-      
       setIngredients(res.data.data.ingredients || []);
       return res.data.data;
     },
