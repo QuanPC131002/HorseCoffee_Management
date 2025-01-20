@@ -3,8 +3,10 @@ import Swal from 'sweetalert2'
 import instance from '../config/axios'
 import { useLocalStorage } from './useStorage'
 import { useParams } from 'react-router-dom'
+import { useState } from 'react'
 
 const useOrder = (page: number, limit: number) => {
+  const [orderModal, setIsOrderModal] = useState(false)
   const [user] = useLocalStorage('user', {})
   
   const userId = user?.user?._id
@@ -41,7 +43,6 @@ const useOrder = (page: number, limit: number) => {
     onSuccess: () => {
       Swal.fire({
         title: 'Trả đồ thành công!',
-        // text: 'Đơn hàng của bạn đã được tạo thành công.',
         icon: 'success',
         confirmButtonText: 'OK'
       });
@@ -50,7 +51,7 @@ const useOrder = (page: number, limit: number) => {
   
   const { mutate: createOrder } = useMutation({
     mutationFn: async ({ orderItem, totalPrice, status, notes, orderDate }: any) => {
-      await instance.post('/order', {
+      const {data} = await instance.post('/order', {
         userId,
         orderItem,
         totalPrice,
@@ -58,16 +59,12 @@ const useOrder = (page: number, limit: number) => {
         notes,
         orderDate
       })
+      return data
     },
     onSuccess: () => {
-      Swal.fire({
-        title: 'Tạo đơn thành công!',
-        text: 'Đơn hàng của bạn đã được tạo thành công.',
-        icon: 'success',
-        confirmButtonText: 'OK'
-      });
+      setIsOrderModal(true)
       queryClient.invalidateQueries({
-        queryKey: ['cart', userId]
+        queryKey: ['order']
       });
     },
     
@@ -78,8 +75,6 @@ const useOrder = (page: number, limit: number) => {
     createOrder({ orderItem, totalPrice, status, notes, orderDate })
   }
 
-  // Lấy đơn hàng mới nhất
-  const latestOrder = orders && orders.length > 0 ? orders[orders.length - 1] : null
 
     return {
       orders,
@@ -87,8 +82,9 @@ const useOrder = (page: number, limit: number) => {
       pagination,
       orderDetail,
       updateOrderStatus,
-      latestOrder,
-      createNewOrder
+      createNewOrder,
+      orderModal,
+      setIsOrderModal
     }
 }
 

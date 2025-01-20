@@ -1,6 +1,6 @@
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Card, Col, Pagination, Row } from 'antd';
+import { Button, Card, Col, Modal, Pagination, Row, Table } from 'antd';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCategories } from '../../hook/category/useCategories';
@@ -9,6 +9,7 @@ import useCart from '../../hook/useCart';
 import useOrder from '../../hook/useOrder';
 import { useQuery } from '@tanstack/react-query';
 import instance from '../../config/axios';
+import Swal from 'sweetalert2';
 
 const MenuAll = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,7 +17,7 @@ const MenuAll = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const { data: categories = [] } = useCategories(currentPage, pageSize);
   const { data: products = [] } = useProduct(currentPage, pageSize, selectedCategory);
-  const { createNewOrder } = useOrder(currentPage, pageSize);
+  const { createNewOrder, orderModal, setIsOrderModal, orderDetail} = useOrder(currentPage, pageSize);
   const { data, mutate, calculateTotal } = useCart();
   const [showTextarea, setShowTextarea] = useState(false);
   const [notes, setNotes] = useState('');
@@ -56,14 +57,37 @@ const MenuAll = () => {
   };
 
   const handleCreateOrder = () => {
+    // const orderItem = data?.products || [];
+    // const totalPrice = calculateTotal();
+    // const status = 'Processing';
+    // createNewOrder(orderItem, totalPrice, status, notes);
+    setIsOrderModal(true)
+  };
+
+  //Modal Checkout
+  const handleOk = () => {
+
     const orderItem = data?.products || [];
     const totalPrice = calculateTotal();
     const status = 'Processing';
+    setIsOrderModal(false);
+
     createNewOrder(orderItem, totalPrice, status, notes);
-   
+    Swal.fire({
+      title: 'Tạo đơn thành công!',
+      text: 'Đơn hàng của bạn đã được tạo thành công.',
+      icon: 'success',
+      confirmButtonText: 'OK'
+    }).then((result) => {
+      if(result.isConfirmed){
+      }
+    })
   };
 
-  
+  const handleCancel = () => {
+    setIsOrderModal(false);
+  };
+
   const isCartEmpty = !data?.products || data.products.length === 0;
   return (
     <div>
@@ -256,19 +280,47 @@ const MenuAll = () => {
               Tổng giá: <span className="text-red-600">{calculateTotal()} vnd</span>
             </p>
             <div className="flex justify-end">
-            <button className={`p-2 rounded-lg ${isCartEmpty ? 'bg-gray-400 text-gray-600 cursor-not-allowed' : 'bg-green-700 text-white'}`} onClick={handleCreateOrder} disabled={isCartEmpty}>
+            <Button className={`p-2 rounded-lg ${isCartEmpty ? 'bg-gray-400 text-gray-600 cursor-not-allowed' : 'bg-green-700 text-white'}`} onClick={handleCreateOrder} disabled={isCartEmpty}>
               {!isCartEmpty ? (
-                <Link to="/order">Thanh toán</Link>
+                <Link to="/menu">Thanh toán</Link>
               ) : (
                 'Thanh toán'
               )}
-            </button>
-              <button
+            </Button>
+            <Modal title="Chi tiết đơn hàng" open={orderModal} onOk={handleOk} onCancel={handleCancel}>
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="py-2 px-4 text-sm font-medium">Tên</th>
+                  <th className="py-2 px-4 text-sm font-medium">Số lượng</th>
+                  <th className="py-2 px-4 text-sm font-medium">Giá</th>
+                  <th className="py-2 px-4 text-sm font-medium">Thành tiền</th>
+                </tr>
+              </thead>
+              <tbody>
+              {Array.isArray(data?.products) &&
+                data.products.map((item: any, index: number) => (
+                  <tr key={index}>
+                    <td className="text-center p-2">{item.name}</td>
+                    <td className="text-center p-2">
+                      <div className="flex items-center justify-center">
+                        <span className="px-4">{item.quantity}</span>
+                      </div>
+                    </td>
+                    <td className="text-center p-2">{item.price} vnd</td>
+                    <td className="text-center p-2">{item.price * item.quantity} vnd</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            </Modal>
+              <Button
+                type='primary'
                 className={`p-2 rounded-lg ${isCartEmpty ? 'bg-gray-400 text-gray-600 cursor-not-allowed' : 'bg-blue-700 text-white'}`}
                 onClick={() => setShowTextarea(!showTextarea)}
               >
                 Ghi Chú
-              </button>
+              </Button>
             </div>
             {showTextarea && !isCartEmpty && (
               <textarea

@@ -59,7 +59,6 @@ const OrderDetail = () => {
           </table>
         </div>
         <div className="mt-6">
-            
           <p id="notes" className="mt-2 p-2 w-full">Ghi chú: <span className=''>{orderDetail.notes || "Không có ghi chú"}</span></p>
         </div>
         <div className="flex justify-end mt-6">
