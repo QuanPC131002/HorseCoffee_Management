@@ -43,7 +43,7 @@ const Login = () => {
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <img className="mx-auto h-10 w-auto" src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
-            <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Login to your account</h2>
+            <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Đăng Nhập</h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -51,22 +51,32 @@ const Login = () => {
            
 
             <div>
-                <label className="block text-sm/6 font-medium text-gray-900">Email address</label>
+                <label className="block text-sm/6 font-medium text-gray-900">Email</label>
                 <div className="mt-2">
-                <input type="email" {...register('email', { required: true, minLength: 3})} className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+                <input type="email"
+                 {...register('email', {
+                    required: { value: true, message: 'Vui lòng nhập email!' },
+                    minLength: { value: 6, message: 'Email phải có ít nhất 6 ký tự!' }
+                })}
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                 {errors.email && <p className='text-[red]'>{errors.email.message}</p>}
                 </div>
             </div>
 
             <div>
                 <div className="flex items-center justify-between">
-                <label  className="block text-sm/6 font-medium text-gray-900">Password</label>
+                <label  className="block text-sm/6 font-medium text-gray-900">Mật khẩu</label>
                 <div className="text-sm">
-                    <Link to='/auth/forgot-password' className="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</Link>
+                    <Link to='/auth/forgot-password' className="font-semibold text-indigo-600 hover:text-indigo-500">Quên mật khẩu?</Link>
                 </div>
                 </div>
                 <div className="mt-2">
-                <input type="password" {...register('password', { required: true, minLength: 6})} className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+                <input type="password"
+                  {...register('password', {
+                    required: { value: true, message: 'Vui lòng nhập mật khẩu!' },
+                    minLength: { value: 6, message: 'Mật khẩu phải có ít nhất 6 ký tự!' }
+                  })}
+                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                 {errors.password && <p className='text-[red]'>{errors.password.message}</p>}
                 </div>
             </div>
@@ -77,8 +87,8 @@ const Login = () => {
             </form>
 
             <p className="mt-10 text-center text-sm/6 text-gray-500">
-            Not a member?
-            <Link to="/auth/register" className="font-semibold text-indigo-600 hover:text-indigo-500">Register</Link>
+            Không phải là thành viên    ?
+            <Link to="/auth/register" className="font-semibold text-indigo-600 hover:text-indigo-500">Đăng ký</Link>
             </p>
         </div>
         </div>

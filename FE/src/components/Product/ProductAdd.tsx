@@ -131,7 +131,12 @@ const ProductAdd = () => {
         <Form.Item
           label="Tên sản phẩm"
           name="name"
-          rules={[{ required: true, message: 'Vui lòng nhập tên sản phẩm!' }]}>
+          rules={[
+            { required: true, message: 'Vui lòng nhập tên sản phẩm!' },
+            { min: 3, message: 'Tên sản phẩm phải có ít nhất 3 ký tự!' },
+            { max: 255, message: 'Tên sản phẩm không được quá 255 ký tự!' },
+          ]}
+          >
           <Input placeholder="Nhập tên sản phẩm" />
         </Form.Item>
 
@@ -140,6 +145,9 @@ const ProductAdd = () => {
             label="Danh Sách Nguyên Liệu"
             name="wareHouse"
             style={{ flex: 1 }}
+            rules={[
+              { required: true, message: 'Vui lòng chọn nguyên liệu!' },
+            ]}
             >
             <Select
               placeholder="Chọn nguyên liệu"
@@ -157,6 +165,11 @@ const ProductAdd = () => {
             label="Số lượng"
             name="count"
             style={{ flex: 1 }}
+            rules={[
+              { required: true, message: 'Vui lòng nhập số lượng!' },
+              { min: 1, message: 'Số lượng phải có ít nhất 1!' },
+
+            ]}
             >
             <InputNumber
               min={1}
@@ -167,7 +180,7 @@ const ProductAdd = () => {
             />
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             label="Đơn vị"
             name="unit"
             style={{ flex: 1 }}
@@ -178,7 +191,7 @@ const ProductAdd = () => {
               style={{ width: '100%' }}
               placeholder="Nhập đơn vị"
             />
-          </Form.Item>
+          </Form.Item> */}
           <Button
             type="primary"
             style={{ alignSelf: 'flex-end' }}
@@ -195,7 +208,11 @@ const ProductAdd = () => {
           style={{ marginBottom: '20px' }}
         />
 
-        <Form.Item label="Ảnh">
+        <Form.Item label="Ảnh"
+          rules={[
+            { required: true, message: 'Vui lòng chọn ảnh' },
+          ]}
+        >
           <ImageUpload onUploadSuccess={handleImageUploadSuccess} />
         </Form.Item>
 

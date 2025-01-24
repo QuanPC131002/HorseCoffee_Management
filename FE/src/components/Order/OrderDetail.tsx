@@ -76,9 +76,8 @@ const OrderDetail = () => {
             </>
           ) : orderDetail.status === 'Completed' ? (
             <p className="text-yellow-500 text-sm font-medium text-center">
-              Đơn hàng đã hoàn thành. Không thể trả đồ.
+              Đơn hàng đã hoàn thành
             </p>
-            
           ) : (
             <button
               className="bg-green-500 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-green-600 transition-all"

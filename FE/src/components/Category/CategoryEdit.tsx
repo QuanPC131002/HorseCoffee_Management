@@ -43,7 +43,11 @@ const CategoryEdit = () => {
         <Form.Item
           label="Tên danh mục"
           name="name"
-          rules={[{ required: true, message: 'Vui lòng nhập tên danh mục!' }]}
+          rules={[
+            { required: true, message: 'Vui lòng nhập tên danh mục!' },
+            { min: 3, message: 'Tên danh mục phải có ít nhất 3 ký tự!' },
+            { max: 255, message: 'Tên danh mục không được quá 255 ký tự!' },
+          ]}
         >
           <Input placeholder="Nhập tên danh mục" />
         </Form.Item>
@@ -51,7 +55,10 @@ const CategoryEdit = () => {
         <Form.Item
           label="Slug"
           name="slug"
-          rules={[{ required: true, message: 'Vui lòng nhập slug!' }]}
+          rules={[
+            { required: true, message: 'Vui lòng nhập slug!' },
+            { pattern: /^[a-z0-9-]+$/, message: 'Slug phải là chuỗi chữ cái hoặc số, có thể có dấu gạch ngang!' },
+          ]}
         >
           <Input placeholder="Nhập slug" />
         </Form.Item>

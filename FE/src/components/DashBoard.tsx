@@ -1,19 +1,16 @@
 import { faBars, faCartShopping, faFolder, faPenToSquare, faSearch, faWarehouse } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Button } from 'antd'
 import { useState } from 'react'
-import { Link, Outlet, useNavigate, useParams } from 'react-router-dom'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import instance from '../config/axios'
-import { Avatar, Logo } from '../upload'
 import { useLocalStorage } from '../hook/useStorage'
+import { Avatar, Logo } from '../upload'
 
 const DashBoard = () => {
  const [user] = useLocalStorage('user', {})
   const userId = user?.user?._id
-  console.log('User ID:', userId);
-  console.log('Route Parameters:', useParams());
   const [confirmLogout, setConfirmLogout] = useState(false);
   const navigate = useNavigate()
 
@@ -21,7 +18,6 @@ const DashBoard = () => {
     queryKey: ['USER_DETAIL', userId],
     queryFn: async () => {
       const res = await instance.get(`/auth/${userId}`)
-      console.log(res.data);
       return res.data
     }
   })
