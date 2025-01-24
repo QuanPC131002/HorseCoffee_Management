@@ -1,17 +1,33 @@
 import { faBars, faCartShopping, faFolder, faPenToSquare, faSearch, faWarehouse } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button } from 'antd'
 import { useState } from 'react'
-import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { Link, Outlet, useNavigate, useParams } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import instance from '../config/axios'
 import { Avatar, Logo } from '../upload'
+import { useLocalStorage } from '../hook/useStorage'
 
 const DashBoard = () => {
+ const [user] = useLocalStorage('user', {})
+  const userId = user?.user?._id
+  console.log('User ID:', userId);
+  console.log('Route Parameters:', useParams());
   const [confirmLogout, setConfirmLogout] = useState(false);
   const navigate = useNavigate()
 
+  const {data} = useQuery({
+    queryKey: ['USER_DETAIL', userId],
+    queryFn: async () => {
+      const res = await instance.get(`/auth/${userId}`)
+      console.log(res.data);
+      return res.data
+    }
+  })
+
+  const role = data?.data?.role
+  const name = data?.data?.name
   const { mutate } = useMutation({
     mutationFn: async () => {
       await instance.post(`/auth/logout`);
@@ -48,50 +64,57 @@ const DashBoard = () => {
         </div>
         <div className="mt-10 mb-10">
         <div className="p-4 text-center my-4">
-          <div
-            className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
-            onClick={() => navigate('/menu')}
-          >
-            <FontAwesomeIcon icon={faPenToSquare} className="h-[20px] mx-2" />
-            Đặt Hàng
+            <button
+              className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
+              onClick={() => navigate('/menu')}
+            >
+              <FontAwesomeIcon icon={faPenToSquare} className="h-[20px] mx-2" />
+              Đặt Hàng
+            </button>
           </div>
-        </div>
-        <div className="p-4 text-center my-4">
-          <div
-            className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
-            onClick={() => navigate('/products')}
-          >
-            <FontAwesomeIcon icon={faBars} className="h-[20px] mx-2" />
-            Quản Lí Sản Phẩm
+
+          <div className="p-4 text-center my-4">
+            <button
+              className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
+              onClick={() => navigate('/order')}
+            >
+              <FontAwesomeIcon icon={faCartShopping} className="h-[20px] mx-2" />
+              Quản Lí Đơn Hàng
+            </button>
           </div>
-        </div>
-        <div className="p-4 text-center my-4">
-          <div
-            className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
-            onClick={() => navigate('/categories')}
-          >
-            <FontAwesomeIcon icon={faFolder} className="h-[20px] mx-2" />
-            Quản Lí Danh Mục
-          </div>
-        </div>
-        <div className="p-4 text-center my-4">
-          <div
-            className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
-            onClick={() => navigate('/ware')}
-          >
-            <FontAwesomeIcon icon={faWarehouse} className="h-[20px] mx-2" />
-            Kho Nguyên Liệu
-          </div>
-        </div>
-        <div className="p-4 text-center my-4">
-          <div
-            className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
-            onClick={() => navigate('/order')}
-          >
-            <FontAwesomeIcon icon={faCartShopping} className="h-[20px] mx-2" />
-            Quản Lí Đơn Hàng
-          </div>
-        </div>
+          {role === 'admin' && (
+            <>
+              <div className="p-4 text-center my-4">
+                <button
+                  className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
+                  onClick={() => navigate('/products')}
+                >
+                  <FontAwesomeIcon icon={faBars} className="h-[20px] mx-2" />
+                  Quản Lí Sản Phẩm
+                </button>
+              </div>
+
+              <div className="p-4 text-center my-4">
+                <button
+                  className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
+                  onClick={() => navigate('/categories')}
+                >
+                  <FontAwesomeIcon icon={faFolder} className="h-[20px] mx-2" />
+                  Quản Lí Danh Mục
+                </button>
+              </div>
+
+              <div className="p-4 text-center my-4">
+                <button
+                  className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
+                  onClick={() => navigate('/ware')}
+                >
+                  <FontAwesomeIcon icon={faWarehouse} className="h-[20px] mx-2" />
+                  Kho Nguyên Liệu
+                </button>
+              </div>
+            </>
+          )}
         <div className="p-4 text-center my-8">
           <div
             className="w-full flex justify-center items-center p-4 border border-red-300 rounded-lg cursor-pointer hover:bg-red-500 text-black"
@@ -127,10 +150,10 @@ const DashBoard = () => {
               <div className="">
                 <Link to='/profile'><img src={Avatar} alt="" className='w-[50px] rounded-full'/></Link>
               </div>
-              <div className="ml-2">
-                <h3 className='text-white font-bold'>Minh Quân</h3>
-                <p className='text-white font-light'>Admin</p>
-              </div>
+                <div className="ml-2">
+                  <h3 className='text-white font-bold'>{name}</h3>
+                  <p className='text-white font-light'>{role}</p>
+                </div>
             </div>
         </div>
         {/* End Sidebar */}

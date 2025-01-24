@@ -59,7 +59,7 @@ import PrivateRoute from './PrivateRouter';
             <Route path="register" element={<Register />} />
             <Route path="forgot-password" element={<ForgotPassword />} />
             <Route path="reset-password" element={<ResetPassword />} />
-            {/* <Route path="profile" element={<LayoutProfile />} /> */}
+            <Route path="profile/:id" element={<LayoutProfile />} />
           </Route>
         </Routes>
       </div>

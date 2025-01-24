@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import Ware from "../models/Ware";
 
 export const createWareHouse = async (req, res) => {
