@@ -1,17 +1,64 @@
 import Order from "../models/Order";
 import Cart from "../models/Cart";
+import Product from "../models/Product";
 
 export const createOrder = async (req, res) => {
     try {
         const { userId, orderItem, totalPrice, status, notes, orderDate } = req.body;
-        const order = await Order.create({ userId, orderItem, totalPrice, status, notes, orderDate })
-        await Cart.findOneAndDelete({userId})
-        return res.status(200).json(order)
+
+        const updatedWarehouses = [];
+
+        // Kiểm tra và giảm tồn kho nguyên liệu dựa trên các sản phẩm trong đơn hàng
+        for (const item of orderItem) {
+            const product = await Product.findById(item.productId).populate("ingredients.wareHouse");
+            if (!product) {
+                return res.status(404).json({ message: `Product with ID ${item.productId} not found!` });
+            }
+
+            for (const ingredient of product.ingredients) {
+                const warehouse = ingredient.wareHouse;
+                if (!warehouse) {
+                    return res.status(400).json({ message: `Warehouse for ingredient ${ingredient.name} not found!` });
+                }
+
+                const requiredQuantity = ingredient.count * item.quantity;
+                if (warehouse.countInStock < requiredQuantity) {
+                    return res.status(400).json({
+                        message: `Not enough stock for ingredient ${ingredient.name} in warehouse!`,
+                    });
+                }
+
+                // Lưu thông tin cần giảm
+                updatedWarehouses.push({
+                    warehouse,
+                    quantityToDeduct: requiredQuantity,
+                });
+            }
+        }
+
         
+        const order = await Order.create({ userId, orderItem, totalPrice, status, notes, orderDate });
+        
+        for (const { warehouse, quantityToDeduct } of updatedWarehouses) {
+            warehouse.countInStock -= quantityToDeduct;
+            await warehouse.save();
+        }
+
+        
+        await Cart.findOneAndDelete({ userId });
+
+        return res.status(200).json({
+            message: "Order created successfully!",
+            order,
+        });
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({
+            name: error.name || "Error",
+            message: error.message || "Server error",
+        });
     }
-}
+};
+
     
 export const getOrder = async (req, res) => {
     try {

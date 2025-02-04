@@ -119,27 +119,42 @@ const MenuAll = () => {
           <div className="p-4">
             <Row gutter={[12, 12]}>
               {Array.isArray(filteredProducts) &&
-                filteredProducts?.map((item) => (
-                  <Col key={item._id} span={6}> {/* Chiều rộng cột cho mỗi sản phẩm */}
+                filteredProducts.map((item) => (
+                  <Col key={item._id} span={6}>
+                    {/* Chiều rộng cột cho mỗi sản phẩm */}
                     <Card
                       hoverable
-                      cover={<img alt={item.name} src={item.image} style={{ objectFit: 'cover', height: '200px', width: '100%' }} />}
+                      cover={
+                        <img
+                          alt={item.name}
+                          src={item.image}
+                          style={{ objectFit: "cover", height: "200px", width: "100%" }}
+                        />
+                      }
                       className="bg-white"
                     >
                       <div className="flex justify-between mb-2 items-center">
-                        <p className='truncate'>{item.name}</p>
-                        <span className="text-red-700 whitespace-nowrap">{item.price} vnd</span>
+                        <p className="truncate">{item.name}</p>
+                        <span className="text-red-700 whitespace-nowrap">
+                          {item.price} vnd
+                        </span>
                       </div>
+
+                      {item.countInStock === 0 && (
+                        <p className="text-red-600 font-semibold text-sm">Hết hàng</p>
+                      )}
+
                       <Button
                         className="w-full mt-auto"
                         onClick={() => {
                           mutate({
-                            action: 'add-to-cart',
+                            action: "add-to-cart",
                             productId: item._id,
                             quantity: 1,
-                            notes: notes || '',
+                            notes: notes || "",
                           });
                         }}
+                        disabled={item.countInStock === 0} 
                       >
                         Thêm
                       </Button>
@@ -148,6 +163,7 @@ const MenuAll = () => {
                 ))}
             </Row>
           </div>
+
 
          
 
