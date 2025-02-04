@@ -19,6 +19,7 @@ import WareEdit from "../components/WareHouse/WareEdit";
 import WareList from "../components/WareHouse/WareList";
 import LayoutAdmin from "../layout/Admin";
 import PrivateRoute from './PrivateRouter';
+import Statis from '../components/Stastis/Statis';
 
   const IndexRouter = () => {
     return (
@@ -48,6 +49,11 @@ import PrivateRoute from './PrivateRouter';
               <Route index element={<PrivateRoute element={<Order />} />} />
               <Route path="detail/:userId/:orderId" element={<PrivateRoute element={<OrderDetail />} />} />
             </Route>
+
+            <Route path="statis">
+              <Route index element={<PrivateRoute element={<Statis />} />} />
+            </Route>
+
             <Route path='profile'>
               <Route index element={<PrivateRoute element={<LayoutProfile />} />} />
               <Route path='change-password' element={<PrivateRoute element={<ChangePassword />} />} />

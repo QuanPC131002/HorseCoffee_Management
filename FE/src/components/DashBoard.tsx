@@ -109,6 +109,16 @@ const DashBoard = () => {
                   Kho Nguyên Liệu
                 </button>
               </div>
+
+              <div className="p-4 text-center my-4">
+                <button
+                  className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
+                  onClick={() => navigate('/statis')}
+                >
+                  <FontAwesomeIcon icon={faFolder} className="h-[20px] mx-2" />
+                  Thống Kê
+                </button>
+              </div>
             </>
           )}
         <div className="p-4 text-center my-8">
