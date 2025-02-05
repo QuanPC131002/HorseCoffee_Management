@@ -1,12 +1,12 @@
-import { faBars, faCartShopping, faFolder, faPenToSquare, faSearch, faWarehouse } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faCartShopping, faChartSimple, faFolder, faPenToSquare, faSearch, faWarehouse } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import instance from '../config/axios'
 import { useLocalStorage } from '../hook/useStorage'
-import { Avatar, Logo } from '../upload'
+import { Logo } from '../upload'
 
 const DashBoard = () => {
  const [user] = useLocalStorage('user', {})
@@ -40,7 +40,7 @@ const DashBoard = () => {
       console.error('Logout failed:', error);
     }
   });
-
+  
   const handleLogout = () => {
     if (confirmLogout) {
       mutate();
@@ -115,7 +115,7 @@ const DashBoard = () => {
                   className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
                   onClick={() => navigate('/statis')}
                 >
-                  <FontAwesomeIcon icon={faFolder} className="h-[20px] mx-2" />
+                  <FontAwesomeIcon icon={faChartSimple} className="h-[20px] mx-2" />
                   Thống Kê
                 </button>
               </div>

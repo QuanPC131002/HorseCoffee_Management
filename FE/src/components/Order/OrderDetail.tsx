@@ -26,6 +26,9 @@ const OrderDetail = () => {
     updateOrderStatus(statusText) 
   }
   
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('vi-VN').format(price) + 'đ';
+  };
 
   if (!orderDetail || !orderDetail.orderItem) {
     return <div>Không có thông tin đơn hàng</div>
@@ -51,8 +54,8 @@ const OrderDetail = () => {
                 <tr key={index} className={`${index % 2 === 0 ? 'bg-gray-50' : ''}`}>
                   <td className="py-2 px-4 text-sm">{item.productId.name}</td>
                   <td className="py-2 px-4 text-sm">{item.quantity}</td>
-                  <td className="py-2 px-4 text-sm">{item.price} VND</td>
-                  <td className="py-2 px-4 text-sm">{item.price * item.quantity} VND</td>
+                  <td className="py-2 px-4 text-sm">{formatPrice(item.price)}</td>
+                  <td className="py-2 px-4 text-sm">{formatPrice(item.price * item.quantity)}</td>
                 </tr>
               ))}
             </tbody>

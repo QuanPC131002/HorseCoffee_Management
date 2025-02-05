@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import instance from '../config/axios'
 import { useLocalStorage } from './useStorage'
 import { toast } from 'react-toastify';
+import { message } from 'antd';
 const useCart = () => {
     const queryClient = useQueryClient()
     const [user] = useLocalStorage('user', {})
@@ -11,9 +12,10 @@ const useCart = () => {
     const { data, isLoading } = useQuery({
         queryKey: ['cart', userId],
         queryFn: async () => {
-            const {data} = await instance.get(`cart/${userId}`)
-            return data
+            const response = await instance.get(`cart/${userId}`)
+            return response.data
         },
+        enabled: !!userId
     })
 
     const { mutate } = useMutation({
@@ -63,7 +65,7 @@ const useCart = () => {
                 queryKey: ['cart', userId]
             });
             if (action === 'add-to-cart') {
-                toast.success('Thêm thành công')
+                message.success('Thêm thành công')
             } 
         }
     })

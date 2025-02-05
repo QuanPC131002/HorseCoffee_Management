@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import User from "../models/User";
 dotenv.config()
+const { SECRET_CODE } = process.env
 export const checkIsAdmin = async (req, res, next) => {
   try {
     const token = req.headers?.authorization?.split(" ")[1];
@@ -11,7 +12,7 @@ export const checkIsAdmin = async (req, res, next) => {
       });
     }
 
-    const decoded = jwt.verify(token, process.env.SECRET_CODE);
+    const decoded = jwt.verify(token, SECRET_CODE);
     console.log(decoded);
     
     if (!decoded) {

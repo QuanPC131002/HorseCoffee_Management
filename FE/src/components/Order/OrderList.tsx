@@ -14,7 +14,9 @@ const Order = () => {
         setCurrentPage(page);
         setPageSize(size);
   };
-
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('vi-VN').format(price) + 'đ';
+  };
   return (
     <div>
     <div className="p-4 min-h-screen">
@@ -24,14 +26,13 @@ const Order = () => {
         <h2 className="text-lg font-semibold mb-2">Mã: {item._id}</h2>
         <p className="text-gray-600 mb-1">{item.userId.role}: {item.userId.name}</p>
         <p className="text-gray-600 mb-1">Ngày đặt hàng: {item.orderDate}</p>
-        <p className="text-gray-600 mb-1">Tổng tiền: <span className="font-semibold text-green-500">{item.totalPrice} VND</span></p>
+        <p className="text-gray-600 mb-1">Tổng tiền: <span className="font-semibold text-green-500">{formatPrice(item.totalPrice)}</span></p>
         <p className="text-gray-600">Trạng thái: <span className="font-semibold text-yellow-500">{item.status}</span></p>
         <button className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
           <Link to={`/order/detail/${item.userId}/${item._id}`}>Xem chi tiết</Link>
         </button>
       </div>
       ))}
-      
     
   </div>
     </div>

@@ -107,7 +107,7 @@ const ProductList = () => {
                           <img src={item.image} alt="" className='w-[100px]'/>
                       </td>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        {item.price} vnd
+                      {new Intl.NumberFormat("vi-VN").format(item.price)}đ
                       </td>
                       <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                         <button className="text-indigo-500 hover:text-indigo-700 px-3 py-1" onClick={() => mutate(item._id)}>Xóa</button>

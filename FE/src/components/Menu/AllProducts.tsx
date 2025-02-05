@@ -1,15 +1,15 @@
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Card, Col, Modal, Pagination, Row, Table } from 'antd';
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { Button, Card, Col, Modal, Pagination, Row } from 'antd';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import instance from '../../config/axios';
 import { useCategories } from '../../hook/category/useCategories';
 import { useProduct } from '../../hook/product/useProduct';
 import useCart from '../../hook/useCart';
 import useOrder from '../../hook/useOrder';
-import { useQuery } from '@tanstack/react-query';
-import instance from '../../config/axios';
-import Swal from 'sweetalert2';
 
 const MenuAll = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,10 +17,12 @@ const MenuAll = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const { data: categories = [] } = useCategories(currentPage, pageSize);
   const { data: products = [] } = useProduct(currentPage, pageSize, selectedCategory);
-  const { createNewOrder, orderModal, setIsOrderModal, orderDetail} = useOrder(currentPage, pageSize);
+  const { createNewOrder, orderModal, setIsOrderModal} = useOrder(currentPage, pageSize);
   const { data, mutate, calculateTotal } = useCart();
   const [showTextarea, setShowTextarea] = useState(false);
   const [notes, setNotes] = useState('');
+
+  const navigate = useNavigate()
 
   const categoriesList = categories || [];
   const productList = products?.data || [];
@@ -29,6 +31,7 @@ const MenuAll = () => {
     ? productList.filter((item: any) => item.categoryId === selectedCategory)
     : productList;
 
+ 
   const totalProducts = products?.pagination?.total || 0;
 
   const { data: relatedProduct, isLoading: isLoadingRelatedProduct } = useQuery({
@@ -80,12 +83,17 @@ const MenuAll = () => {
       confirmButtonText: 'OK'
     }).then((result) => {
       if(result.isConfirmed){
+        navigate('/order')
       }
     })
   };
 
   const handleCancel = () => {
     setIsOrderModal(false);
+  };
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('vi-VN').format(price) + 'đ';
   };
 
   const isCartEmpty = !data?.products || data.products.length === 0;
@@ -136,7 +144,7 @@ const MenuAll = () => {
                       <div className="flex justify-between mb-2 items-center">
                         <p className="truncate">{item.name}</p>
                         <span className="text-red-700 whitespace-nowrap">
-                          {item.price} vnd
+                          {formatPrice(item.price)}
                         </span>
                       </div>
 
@@ -186,7 +194,7 @@ const MenuAll = () => {
                     >
                       <div className="flex justify-between mb-2 items-center">
                         <p className="truncate">{item.name}</p>
-                        <span className="text-red-700 whitespace-nowrap">{item.price} vnd</span>
+                        <span className="text-red-700 whitespace-nowrap">{formatPrice(item.price)}</span>
                       </div>
                       <Button
                         className="w-full mt-auto"
@@ -271,8 +279,8 @@ const MenuAll = () => {
                         </button>
                       </div>
                     </td>
-                    <td className="text-center p-2">{item.price} vnd</td>
-                    <td className="text-center p-2">{item.price * item.quantity} vnd</td>
+                    <td className="text-center p-2">{formatPrice(item.price)}</td>
+                    <td className="text-center p-2">{formatPrice(item.price * item.quantity)}</td>
                     <td className="text-center p-2">
                       <button
                         onClick={() =>
@@ -293,7 +301,7 @@ const MenuAll = () => {
           </table>
           <div className="flex flex-col p-4">
             <p className="font-semibold text-lg">
-              Tổng giá: <span className="text-red-600">{calculateTotal()} vnd</span>
+              Tổng giá: <span className="text-red-600">{formatPrice(calculateTotal())}</span>
             </p>
             <div className="flex justify-end">
             <Button className={`p-2 rounded-lg ${isCartEmpty ? 'bg-gray-400 text-gray-600 cursor-not-allowed' : 'bg-green-700 text-white'}`} onClick={handleCreateOrder} disabled={isCartEmpty}>

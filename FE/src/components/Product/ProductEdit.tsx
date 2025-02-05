@@ -185,7 +185,7 @@ const ProductEdit = () => {
             />
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             label="Đơn vị"
             name="unit"
             style={{ flex: 1 }}
@@ -195,7 +195,7 @@ const ProductEdit = () => {
               style={{ width: '100%' }}
               placeholder="Nhập đơn vị"
             />
-          </Form.Item>
+          </Form.Item> */}
           <Button
             type="primary"
             style={{ alignSelf: 'flex-end' }}

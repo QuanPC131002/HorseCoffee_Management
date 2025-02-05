@@ -26,9 +26,7 @@ import Statis from '../components/Stastis/Statis';
       <div>
         <Routes>
           <Route path='/' element={<LayoutAdmin />}>
-            <Route path='menu'>
-              <Route index element={<PrivateRoute element={<MenuAll />} />} />
-            </Route>
+            <Route path="menu" element={<PrivateRoute element={<MenuAll />} />} />
             <Route path='categories'>
               <Route index element={<PrivateRoute element={<CategoryList />} />} />
               <Route path="add" element={<PrivateRoute element={<CategoryAdd />} />} />

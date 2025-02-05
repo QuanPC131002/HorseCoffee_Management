@@ -5,20 +5,29 @@ export const getCartByUserId = async (req, res) => {
     const { userId } = req.params;
     try {
         const cart = await Cart.findOne({userId}).populate("products.productId")
+
+        if (!cart) {
+            return res.status(404).json({ message: "Cart not found" });
+        }
+
         const cartData = {
             products: cart.products.map((item) => ({
-                productId: item.productId._id,
-                name: item.productId.name,
-                price: item.productId.price,
+                productId: item.productId ? item.productId._id : null, 
+                name: item.productId ? item.productId.name : '',
+                price: item.productId ? item.productId.price : 0,
                 quantity: item.quantity,
                 notes: cart.notes || '' 
             })),
             notes: cart.notes || ''  
         };
 
-        return res.status(200).json( cartData )
+        return res.status(200).json(cartData)
     } catch (error) {
-        
+        return res.status(500).json({
+            error: "Internal Server Error",
+            details: error.message,
+            stack: error.stack,
+        });
     }
 }
 // Thêm sản phẩm vào giỏ hàng
@@ -126,7 +135,6 @@ export const removeItemCart = async (req, res, next) => {
 
 export const clearCart = async (req, res) => {
     try {
-        
       const userId = req.user._id;
       const cart = await Cart.findOne({ userId });
       if (!cart) {

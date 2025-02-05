@@ -1,6 +1,5 @@
-import React from 'react'
-import { useLocalStorage } from '../hook/useStorage';
 import { Navigate } from 'react-router-dom';
+import { useLocalStorage } from '../hook/useStorage';
 
 const PrivateRoute = ({ element }: any) => {
     const [user] = useLocalStorage('user', {});
