@@ -1,4 +1,4 @@
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCreditCard, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery } from '@tanstack/react-query';
 import { Button, Card, Col, Modal, Pagination, Row } from 'antd';
@@ -233,22 +233,22 @@ const MenuAll = () => {
         
 
         {/* Order */}
-        <div className="bg-gray-300 rounded-xl">
-          <h1 className="text-center font-semibold text-3xl">Đơn Hàng</h1>
-          <table className="w-full">
+        <div className="bg-white shadow-lg rounded-xl p-6">
+          <h1 className="text-center font-bold text-3xl text-brown-800">Đơn Hàng</h1>
+          <table className="w-full mt-4 border border-gray-300 rounded-lg overflow-hidden">
             <thead>
-              <tr>
-                <td className="bg-gray-400 text-center p-2 font-semibold">Tên món</td>
-                <td className="bg-gray-400 text-center p-2 font-semibold">Số lượng</td>
-                <td className="bg-gray-400 text-center p-2 font-semibold">Giá</td>
-                <td className="bg-gray-400 text-center p-2 font-semibold">Thành tiền</td>
-                <td className="bg-gray-400 text-center p-2 font-semibold">Action</td>
+              <tr className='bg-blue-300'>
+                <th className="text-center p-2 ">Tên món</th>
+                <th className="text-center p-2 ">Số lượng</th>
+                <th className="text-center p-2 ">Đơn Giá</th>
+                <th className="text-center p-2 ">Thành tiền</th>
+                <th className="text-center p-2 "></th>
               </tr>
             </thead>
             <tbody>
               {Array.isArray(data?.products) &&
                 data.products.map((item: any, index: number) => (
-                  <tr key={index}>
+                  <tr key={index} className='border-b hover:bg-gray-100'>
                     <td className="text-center p-2">{item.name}</td>
                     <td className="text-center p-2">
                       <div className="flex items-center justify-center">
@@ -291,64 +291,72 @@ const MenuAll = () => {
                             notes: notes || '',
                           })
                         }
+                        className='text-red-600 hover:text-red-800'
                       >
-                        <FontAwesomeIcon icon={faTrash} />
+                        <FontAwesomeIcon icon={faTrash}/>
                       </button>
                     </td>
                   </tr>
                 ))}
             </tbody>
           </table>
-          <div className="flex flex-col p-4">
-            <p className="font-semibold text-lg">
-              Tổng giá: <span className="text-red-600">{formatPrice(calculateTotal())}</span>
-            </p>
+          <div className="border border-solid my-4"></div>
+          <div className="flex flex-col mt-6">
+          <div className="flex justify-between font-bold text-lg text-gray-800 my-2">
+              <span>Tổng cộng</span>
+              <span className="text-black">{formatPrice(calculateTotal())}</span>
+            </div>
             <div className="flex justify-end">
-            <Button className={`p-2 rounded-lg ${isCartEmpty ? 'bg-gray-400 text-gray-600 cursor-not-allowed' : 'bg-green-700 text-white'}`} onClick={handleCreateOrder} disabled={isCartEmpty}>
+            <Button className={`p-2 rounded-lg ${isCartEmpty ? 'bg-gray-400 text-gray-600 cursor-not-allowed' : 'bg-red-700 text-white'}`} onClick={handleCreateOrder} disabled={isCartEmpty}>
+            <FontAwesomeIcon icon={faCreditCard} />
               {!isCartEmpty ? (
                 <Link to="/menu">Thanh toán</Link>
               ) : (
                 'Thanh toán'
               )}
             </Button>
-            <Modal title="Chi tiết đơn hàng" open={orderModal} onOk={handleOk} onCancel={handleCancel}>
+            <Modal title={<h2 className="text-center font-bold text-2xl">Horse Coffee</h2>} open={orderModal} onOk={handleOk} onCancel={handleCancel}>
+            <p className="text-center text-gray-600 mb-4">Khu TĐC Quỳnh Đô, Vĩnh Quỳnh, Thanh Trì, Hà Nội</p>
+            <h3 className='font-bold text-center text-lg'>Hóa đơn thanh toán</h3>
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-gray-200">
-                  <th className="py-2 px-4 text-sm font-medium">Tên</th>
-                  <th className="py-2 px-4 text-sm font-medium">Số lượng</th>
-                  <th className="py-2 px-4 text-sm font-medium">Giá</th>
-                  <th className="py-2 px-4 text-sm font-medium">Thành tiền</th>
+                <tr className=''>
+                  <th className="py-2 px-4 text-sm font-medium text-left">Tên</th>
+                  <th className="py-2 px-4 text-sm font-medium text-center">Số lượng</th>
+                  <th className="py-2 px-4 text-sm font-medium text-center">Giá</th>
+                  <th className="py-2 px-4 text-sm font-medium text-right">Thành tiền</th>
                 </tr>
               </thead>
               <tbody>
-              {Array.isArray(data?.products) &&
-                data.products.map((item: any, index: number) => (
-                  <tr key={index}>
-                    <td className="text-center p-2">{item.name}</td>
-                    <td className="text-center p-2">
-                      <div className="flex items-center justify-center">
-                        <span className="px-4">{item.quantity}</span>
-                      </div>
-                    </td>
-                    <td className="text-center p-2">{item.price} vnd</td>
-                    <td className="text-center p-2">{item.price * item.quantity} vnd</td>
-                  </tr>
-                ))}
+                {Array.isArray(data?.products) &&
+                  data.products.map((item: any, index: number) => (
+                    <tr key={index}>
+                      <td className="text-left p-2">{item.name}</td>
+                      <td className="text-center p-2">{item.quantity}</td>
+                      <td className="text-center p-2">{formatPrice(item.price)}</td>
+                      <td className="text-right p-2">{formatPrice(item.price * item.quantity)}</td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
+            <div className="border border-dashed my-4"></div>
+            <div className="flex justify-between font-bold text-lg text-gray-800 mt-4">
+              <span>Tổng cộng</span>
+              <span className="text-black">{formatPrice(calculateTotal())}</span>
+            </div>
             </Modal>
               <Button
                 type='primary'
                 className={`p-2 rounded-lg ${isCartEmpty ? 'bg-gray-400 text-gray-600 cursor-not-allowed' : 'bg-blue-700 text-white'}`}
                 onClick={() => setShowTextarea(!showTextarea)}
+                
               >
-                Ghi Chú
+                <FontAwesomeIcon icon={faEdit} /> Ghi Chú
               </Button>
             </div>
             {showTextarea && !isCartEmpty && (
               <textarea
-                className="w-full mt-4 p-2 border border-gray-300 rounded-lg"
+                className="w-full mt-4 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brown-400"
                 rows={3}
                 placeholder="Nhập ghi chú..."
                 value={notes}

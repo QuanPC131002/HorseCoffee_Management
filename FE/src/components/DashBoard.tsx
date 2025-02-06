@@ -78,7 +78,7 @@ const DashBoard = () => {
               Quản Lí Đơn Hàng
             </button>
           </div>
-          {role === 'admin' && (
+          {role === 'Admin' && (
             <>
               <div className="p-4 text-center my-4">
                 <button

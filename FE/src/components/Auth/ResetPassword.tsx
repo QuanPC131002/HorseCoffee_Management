@@ -1,10 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import instance from "../../config/axios";
 import { useLocalStorage } from "../../hook/useStorage";
-import { useEffect } from "react";
 
 const ResetPassword = () => {
     const [, setUser] = useLocalStorage('user', {})
@@ -38,15 +37,15 @@ const ResetPassword = () => {
     };
 
     return (
-        <div>
-            <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+        <div
+            className="relative h-screen bg-cover bg-center bg-no-repeat"
+            style={{
+                backgroundImage: 'url("https://fnbvietnam.vn/wp-content/uploads/2019/07/giay-phep-kinh-doanh-2.jpg")',
+            }}
+        >
+            <div className="flex h-full flex-col justify-center px-6 py-12 lg:px-8 bg-black bg-opacity-50">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <img
-                        className="mx-auto h-10 w-auto"
-                        src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-                        alt="Your Company"
-                    />
-                    <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+                    <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">
                         Đặt lại mật khẩu
                     </h2>
                 </div>
@@ -54,44 +53,44 @@ const ResetPassword = () => {
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <form className="space-y-6" method="POST" onSubmit={handleSubmit(onSubmit)}>
                         <div>
-                            <label className="block text-sm/6 font-medium text-gray-900">Email</label>
+                            <label className="block text-sm/6 font-medium text-white">Email</label>
                             <div className="mt-2">
                                 <input
                                     type="email"
-                                    {...register('email', { required: true })}
-                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                    {...register('email', { required: 'Email là bắt buộc.' })}
+                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-black outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 />
                                 {errors.email && (
-                                    <p className="text-red-500 text-sm mt-2">Email là bắt buộc.</p>
+                                    <p className="text-red-500 text-sm mt-2">{errors.email.message}</p>
                                 )}
                             </div>
                         </div>
 
                         <div>
-                            <label className="block text-sm/6 font-medium text-gray-900">OTP</label>
+                            <label className="block text-sm/6 font-medium text-white">OTP</label>
                             <div className="mt-2">
                                 <input
                                     type="text"
                                     {...register('otp', {
                                         required: 'OTP là bắt buộc',
-                                        minLength: { value: 6, message: 'OTP phải có ít nhất 6 ký tự' }
+                                        minLength: { value: 6, message: 'OTP phải có ít nhất 6 ký tự' },
                                     })}
-                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-black outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 />
                                 {errors.otp && <p className="text-red-500 text-sm mt-1">{errors.otp.message}</p>}
                             </div>
                         </div>
 
                         <div>
-                            <label className="block text-sm/6 font-medium text-gray-900">Mật khẩu mới</label>
+                            <label className="block text-sm/6 font-medium text-white">Mật khẩu mới</label>
                             <div className="mt-2">
                                 <input
                                     type="password"
                                     {...register('newPassword', {
                                         required: 'Mật khẩu là bắt buộc',
-                                        minLength: { value: 6, message: 'Mật khẩu phải có ít nhất 6 ký tự' }
+                                        minLength: { value: 6, message: 'Mật khẩu phải có ít nhất 6 ký tự' },
                                     })}
-                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-black outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 />
                                 {errors.newPassword && <p className="text-red-500 text-sm mt-1">{errors.newPassword.message}</p>}
                             </div>
@@ -109,6 +108,7 @@ const ResetPassword = () => {
                 </div>
             </div>
         </div>
+
     );
 };
 

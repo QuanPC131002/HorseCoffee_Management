@@ -113,9 +113,25 @@ export const forgotPassword = async (req, res) => {
     const mailOptions = {
       from: SEND_OTP_EMAIL,
       to: email,
-      subject: "Quên mật khẩu - OTP của bạn",
-      text: `Mã OTP của bạn là: ${otp}. Mã này có hiệu lực trong 10 phút.`,
-    }
+      subject: "Horse Coffee - Yêu Cầu Đặt Lại Mật Khẩu",
+      text: `
+          Xin chào quý khách,
+  
+          Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn tại Horse Coffee. Để bảo mật thông tin tài khoản, vui lòng sử dụng mã OTP dưới đây để xác nhận yêu cầu:
+  
+          Mã OTP của bạn là: ${otp}
+  
+          Mã OTP này có hiệu lực trong vòng 10 phút kể từ thời điểm gửi. Sau khi hết thời gian, bạn sẽ cần yêu cầu mã mới.
+  
+          Nếu bạn không yêu cầu thay đổi mật khẩu, vui lòng bỏ qua email này.
+  
+          Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.
+  
+          Trân trọng,
+          Đội ngũ hỗ trợ khách hàng Horse Coffee
+      `,
+  };
+  
 
     await transporter.sendMail(mailOptions);
 

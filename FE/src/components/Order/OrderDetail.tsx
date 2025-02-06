@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
-import useOrder from '../../hook/useOrder'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import useOrder from '../../hook/useOrder'
 
 const OrderDetail = () => {
   const { orderDetail, updateOrderStatus } = useOrder(1, 9)
   const [status, setStatus] = useState('')
-
   const handleStatusChange = (newStatus: string) => {
     let statusText = '';
     switch (newStatus) {
@@ -40,9 +39,10 @@ const OrderDetail = () => {
     <div className="p-6 min-h-screen">
       <div className="bg-white shadow-md rounded-lg p-4 max-w-3xl mx-auto">
         <div className="overflow-x-auto">
+          <h1 className='text-center font-bold text-2xl mb-4'>Chi tiết đơn hàng</h1>
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-200">
+              <tr className="bg-blue-200 text-center">
                 <th className="py-2 px-4 text-sm font-medium">Tên</th>
                 <th className="py-2 px-4 text-sm font-medium">Số lượng</th>
                 <th className="py-2 px-4 text-sm font-medium">Giá</th>
@@ -51,21 +51,22 @@ const OrderDetail = () => {
             </thead>
             <tbody>
               {orderDetail.orderItem.map((item: any, index: number) => (
-                <tr key={index} className={`${index % 2 === 0 ? 'bg-gray-50' : ''}`}>
-                  <td className="py-2 px-4 text-sm">{item.productId.name}</td>
-                  <td className="py-2 px-4 text-sm">{item.quantity}</td>
-                  <td className="py-2 px-4 text-sm">{formatPrice(item.price)}</td>
-                  <td className="py-2 px-4 text-sm">{formatPrice(item.price * item.quantity)}</td>
+                <tr key={index} className='hover:bg-gray-200'>
+                  <td className="py-2 px-4 text-sm text-center">{item.productId.name}</td>
+                  <td className="py-2 px-4 text-sm text-center">{item.quantity}</td>
+                  <td className="py-2 px-4 text-sm text-center">{formatPrice(item.price)}</td>
+                  <td className="py-2 px-4 text-sm text-center">{formatPrice(item.price * item.quantity)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+          
         </div>
         <div className="mt-6">
-          <p id="notes" className="mt-2 p-2 w-full">Ghi chú: <span className=''>{orderDetail.notes || "Không có ghi chú"}</span></p>
+          <p id="notes" className="mt-2 p-2 w-full font-semibold">Ghi chú: <span className=''>{orderDetail.notes || "Không có ghi chú"}</span></p>
         </div>
         <div className="flex justify-end mt-6">
-          {status === '1' ? (
+          {status === '1' || orderDetail.status === 'Completed' ? (
             <>
               <p className="text-green-600 text-sm font-medium">
                 Đồ đã được trả hết
@@ -90,6 +91,7 @@ const OrderDetail = () => {
             </button>
           )}
         </div>
+
 
       </div>
     </div>
