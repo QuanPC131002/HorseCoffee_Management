@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button, Form, Input, message } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import instance from '../../config/axios'
+import Swal from 'sweetalert2'
 const CategoryEdit = () => {
     const { id } = useParams()
     const navigate = useNavigate()
@@ -21,8 +22,19 @@ const CategoryEdit = () => {
             return res.data
         },
         onSuccess: () => {
-            message.success("Cập nhật thành công!"),
+          Swal.fire({
+            title: 'Cập nhật danh mục thành công!',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          });
             navigate('/categories')
+        },
+        onError: () => {
+          Swal.fire({
+            title: 'Có lỗi xảy ra, vui lòng thử lại!',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
         },
     })
 

@@ -25,14 +25,20 @@ const Login = () => {
         },
         onSuccess: (data) => {
             setUser(data),
-            navigate('/statis')
+            navigate('/menu')
             Swal.fire({
                 title: 'Đăng nhập thành công!',
                 icon: 'success',
                 confirmButtonText: 'OK'
             });
         },
-        onError: (error) => console.log(error)
+        onError: () => {
+            Swal.fire({
+                title: 'Đăng nhập thất bại!',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
     })
 
     const onSubmit = (formData: { email: string; password: string }) => {

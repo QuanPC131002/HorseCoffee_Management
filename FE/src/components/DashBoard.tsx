@@ -1,4 +1,4 @@
-import { faBars, faCartShopping, faChartSimple, faFolder, faPenToSquare, faSearch, faWarehouse } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faBox, faBoxes, faCartShopping, faChartSimple, faFolder, faPenToSquare, faSearch, faShop, faWarehouse } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
@@ -59,9 +59,9 @@ const DashBoard = () => {
           <img src={Logo} alt="" className='w-[90px] m-auto rounded-full'/>
         </div>
         <div className="mt-10 mb-10">
-        <div className="p-4 text-center my-4">
+        <div className="p-2 text-center my-4">
             <button
-              className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
+              className="w-full flex justify-center items-center p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
               onClick={() => navigate('/menu')}
             >
               <FontAwesomeIcon icon={faPenToSquare} className="h-[20px] mx-2" />
@@ -69,50 +69,50 @@ const DashBoard = () => {
             </button>
           </div>
 
-          <div className="p-4 text-center my-4">
+          <div className="p-2 text-center my-4">
             <button
-              className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
+              className="w-full flex justify-center items-center p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
               onClick={() => navigate('/order')}
             >
               <FontAwesomeIcon icon={faCartShopping} className="h-[20px] mx-2" />
-              Quản Lí Đơn Hàng
+             Đơn Hàng
             </button>
           </div>
           {role === 'Admin' && (
             <>
-              <div className="p-4 text-center my-4">
+              <div className="p-2 text-center my-4">
                 <button
-                  className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
+                  className="w-full flex justify-center items-center p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
                   onClick={() => navigate('/products')}
                 >
-                  <FontAwesomeIcon icon={faBars} className="h-[20px] mx-2" />
-                  Quản Lí Sản Phẩm
+                  <FontAwesomeIcon icon={faBoxes} className="h-[20px] mx-2" />
+                 Sản Phẩm
                 </button>
               </div>
 
-              <div className="p-4 text-center my-4">
+              <div className="p-2 text-center my-4">
                 <button
-                  className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
+                  className="w-full flex justify-center items-center p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
                   onClick={() => navigate('/categories')}
                 >
                   <FontAwesomeIcon icon={faFolder} className="h-[20px] mx-2" />
-                  Quản Lí Danh Mục
+                 Danh Mục
                 </button>
               </div>
 
-              <div className="p-4 text-center my-4">
+              <div className="p-2 text-center my-4">
                 <button
-                  className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
+                  className="w-full flex justify-center items-center p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
                   onClick={() => navigate('/ware')}
                 >
                   <FontAwesomeIcon icon={faWarehouse} className="h-[20px] mx-2" />
-                  Kho Nguyên Liệu
+                Nguyên Liệu
                 </button>
               </div>
 
-              <div className="p-4 text-center my-4">
+              <div className="p-2 text-center my-4">
                 <button
-                  className="w-full flex justify-center items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
+                  className="w-full flex justify-center items-center p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200"
                   onClick={() => navigate('/statis')}
                 >
                   <FontAwesomeIcon icon={faChartSimple} className="h-[20px] mx-2" />
@@ -121,9 +121,9 @@ const DashBoard = () => {
               </div>
             </>
           )}
-        <div className="p-4 text-center my-8">
+        <div className="p-2 text-center my-8">
           <div
-            className="w-full flex justify-center items-center p-4 border border-red-300 rounded-lg cursor-pointer hover:bg-red-500 text-black"
+            className="w-full flex justify-center items-center p-2 border border-red-300 rounded-lg cursor-pointer bg-red-500 text-white hover:bg-white hover:text-black"
             onClick={handleLogout}
           >
             {confirmLogout ? "Xác nhận" : "Đăng xuất"}
@@ -157,8 +157,8 @@ const DashBoard = () => {
                 <Link to='/profile'><img src={Avatar} alt="" className='w-[50px] rounded-full'/></Link>
               </div> */}
                 <div className="ml-2">
-                  <h3 className='text-white font-bold'>{name}</h3>
-                  <p className='text-white font-light'>{role}</p>
+                  <h3 className='text-gray-200 font-bold text-2xl'>{name}</h3>
+                  <p className='text-white font-light text-sm text-center'>{role}</p>
                 </div>
             </div>
         </div>

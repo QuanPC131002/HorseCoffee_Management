@@ -7,6 +7,7 @@ import { useCategories } from '../../hook/category/useCategories';
 import { useWareHouse } from '../../hook/warehouse/useWareHouse';
 import { Product } from '../../interfaces/Product';
 import ImageUpload from '../../utils/Upload';
+import Swal from 'sweetalert2';
 
 const { Option } = Select;
 
@@ -27,11 +28,19 @@ const ProductAdd = () => {
       return res.data;
     },
     onSuccess: () => {
-      message.success('Thêm sản phẩm thành công!');
+      Swal.fire({
+        title: 'Thêm sản phẩm thành công!',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });
       navigate('/products');
     },
     onError: () => {
-      message.error('Có lỗi xảy ra, vui lòng thử lại!');
+      Swal.fire({
+        title: 'Có lỗi xảy ra, vui lòng thử lại!',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
     },
   });
 
@@ -142,7 +151,7 @@ const ProductAdd = () => {
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Form.Item
-            label="Danh Sách Nguyên Liệu"
+            label="Nguyên Liệu"
             name="wareHouse"
             style={{ flex: 1 }}
             rules={[
@@ -167,7 +176,7 @@ const ProductAdd = () => {
             style={{ flex: 1 }}
             rules={[
               { required: true, message: 'Vui lòng nhập số lượng!' },
-              { min: 1, message: 'Số lượng phải có ít nhất 1!' },
+              // { min: 1, message: 'Số lượng phải có ít nhất 1!' },
 
             ]}
             >
@@ -194,9 +203,9 @@ const ProductAdd = () => {
           </Form.Item> */}
           <Button
             type="primary"
-            style={{ alignSelf: 'flex-end' }}
+            style={{ alignSelf: 'flex-end', marginBottom: '20px' }}
             onClick={handleAddIngredient}>
-            Thêm nguyên liệu
+            Thêm
           </Button>
         </div>
 

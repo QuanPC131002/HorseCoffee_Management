@@ -29,7 +29,7 @@ export const getAllWareHouse = async (req, res) => {
         const skip = (page - 1) * limit; 
         const total = await Ware.countDocuments(); 
 
-        const data = await Ware.find({}).skip(skip).limit(limit)
+        const data = await Ware.find({}).sort({createdAt: -1}).skip(skip).limit(limit)
         if(!data){
             return res.status(404).json({
               message: "Get All WareHouse failed!",

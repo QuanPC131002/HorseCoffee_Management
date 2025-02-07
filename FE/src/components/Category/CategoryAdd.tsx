@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { Button, Form, Input, message } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import instance from '../../config/axios'
+import Swal from 'sweetalert2'
 const CategoryAdd = () => {
     const navigate = useNavigate()
     const mutation = useMutation({
@@ -10,9 +11,20 @@ const CategoryAdd = () => {
             return res.data
         },
         onSuccess: () => {
-            message.success("Thêm thành công!"),
+          Swal.fire({
+            title: 'Thêm danh mục thành công!',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          });
             navigate('/categories')
-        }
+        },
+        onError: () => {
+          Swal.fire({
+            title: 'Có lỗi xảy ra, vui lòng thử lại!',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        },        
     })
 
     const onSubmit = (cate: any) => {

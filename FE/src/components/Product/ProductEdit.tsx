@@ -6,6 +6,7 @@ import instance from '../../config/axios';
 import { useCategories } from '../../hook/category/useCategories';
 import { useWareHouse } from '../../hook/warehouse/useWareHouse';
 import ImageUpload from '../../utils/Upload';
+import Swal from 'sweetalert2';
 
 const { Option } = Select;
 
@@ -39,11 +40,19 @@ const ProductEdit = () => {
       return data;
     },
     onSuccess: () => {
-      message.success('Cập nhật sản phẩm thành công!');
+      Swal.fire({
+        title: 'Cập nhật sản phẩm thành công!',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });
       navigate('/products');
     },
     onError: () => {
-      message.error('Có lỗi xảy ra, vui lòng thử lại!');
+      Swal.fire({
+        title: 'Có lỗi xảy ra, vui lòng thử lại!',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
     },
   });
 
@@ -85,7 +94,7 @@ const ProductEdit = () => {
 
     mutate(productData);
   };
-
+  
   const columns = [
     {
       title: 'Tên nguyên liệu',
@@ -155,7 +164,7 @@ const ProductEdit = () => {
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Form.Item
-            label="Danh Sách Nguyên Liệu"
+            label="Nguyên Liệu"
             name="wareHouse"
             style={{ flex: 1 }}
             >
@@ -198,9 +207,9 @@ const ProductEdit = () => {
           </Form.Item> */}
           <Button
             type="primary"
-            style={{ alignSelf: 'flex-end' }}
+            style={{ alignSelf: 'flex-end', marginBottom: '20px' }}
             onClick={handleAddIngredient}>
-            Thêm nguyên liệu
+            Thêm
           </Button>
         </div>
 

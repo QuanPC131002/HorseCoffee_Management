@@ -1,10 +1,10 @@
-import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Tooltip } from "chart.js";
+import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Tooltip } from "chart.js";
 import { useEffect, useState } from "react";
-import { Line } from "react-chartjs-2";
+import { Bar, Line } from "react-chartjs-2";
 import instance from "../../config/axios";
 import { Order } from "../../interfaces/Order";
 
-ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend);
+ChartJS.register(LineElement, BarElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend);
 
 function SalesChart() {
   const [chartDataDaily, setChartDataDaily] = useState<{
@@ -50,7 +50,7 @@ function SalesChart() {
               label: "Doanh thu hàng ngày",
               data: Object.values(salesByDate),
               borderColor: "rgba(75, 192, 192, 1)",
-              backgroundColor: "rgba(75, 192, 192, 0.2)",
+              backgroundColor: "rgba(75, 192, 192, 0.72)",
               fill: true,
             },
           ],
@@ -65,7 +65,7 @@ function SalesChart() {
               label: "Doanh thu hàng tháng",
               data: Object.values(salesByMonth),
               borderColor: "rgba(153, 102, 255, 1)",
-              backgroundColor: "rgba(153, 102, 255, 0.2)",
+              backgroundColor: "rgba(153, 102, 255, 0.88)",
               fill: true,
             },
           ],
@@ -76,13 +76,17 @@ function SalesChart() {
 
   return (
     <div style={{ width: "80%", margin: "auto" }}>
-      <div>
-        <h3 className="text-white">Doanh thu hàng ngày</h3>
-        <Line data={chartDataDaily} />
+      <div className="my-6">
+        <h3 className="text-white my-2">Doanh thu hàng ngày</h3>
+        <div className="bg-gray-800 p-4 rounded-lg">
+          <Bar data={chartDataDaily} />
+        </div>
       </div>
       <div>
-        <h3 className="text-white">Doanh thu hàng tháng</h3>
-        <Line data={chartDataMonthly} />
+        <h3 className="text-white my-2">Doanh thu hàng tháng</h3>
+        <div className="bg-gray-800 p-4 rounded-lg">
+          <Bar data={chartDataMonthly} />
+        </div>
       </div>
     </div>
   );

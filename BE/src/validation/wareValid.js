@@ -7,7 +7,7 @@ export const wareHouseValid = Joi.object({
     "string.min": "Tên phải có ít nhất 6 ký tự!",
     "string.max": "Tên không được quá 255 ký tự!",
   }),
-  countInStock: Joi.number().required().min(1).max(255).messages({
+  countInStock: Joi.number().required().min(1).max(1000).messages({
     "number.base": "Số lượng trong kho phải là một số!",
     "number.empty": "Số lượng trong kho không được để trống!",
     "number.min": "Số lượng trong kho phải có ít nhất 1!",

@@ -4,6 +4,7 @@ import instance from '../../config/axios'
 import { useCategories } from '../../hook/category/useCategories'
 import { useState } from 'react'
 import { Pagination } from 'antd'
+import Swal from 'sweetalert2'
 
 const CategoryList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,7 +16,14 @@ const CategoryList = () => {
 
   const {mutate} = useMutation({
     mutationFn: async (id: number) => {
-      if(confirm('Bạn có muốn xóa ?')) {
+      const result = await Swal.fire({
+        title: 'Bạn có chắc muốn xóa?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy'
+      })
+      if(result.isConfirmed) {
         await instance.delete(`/categories/${id}`)
       }
     },

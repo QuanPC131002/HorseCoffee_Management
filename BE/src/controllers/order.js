@@ -67,7 +67,7 @@ export const getOrder = async (req, res) => {
         const skip = (page - 1) * limit; 
         const total = await Order.countDocuments(); 
 
-        const order = await Order.find().skip(skip).limit(limit).populate('userId', 'name role').exec();
+        const order = await Order.find().sort({orderDate: -1}).skip(skip).limit(limit).populate('userId', 'name role').exec();
         if((await order).length === 0 ){
             return res.status(404).json({ error: "No orders found" })
         }

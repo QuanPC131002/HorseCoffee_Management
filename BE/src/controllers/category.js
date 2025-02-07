@@ -30,8 +30,8 @@ export const getAllCategory = async (req, res) => {
         const skip = (page - 1) * limit; 
         const total = await Category.countDocuments(); 
       
-        const data = await Category.find({}).skip(skip).limit(limit)
-        if(!data){
+        const data = await Category.find({}).sort({ createdAt: -1 }).skip(skip).limit(limit)
+        if(data.length === 0){
             return res.status(404).json({
               message: "Get All Category failed!",
             });

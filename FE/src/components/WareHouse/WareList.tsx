@@ -4,6 +4,7 @@ import { useWareHouse } from '../../hook/warehouse/useWareHouse'
 import instance from '../../config/axios'
 import { Link } from 'react-router-dom'
 import { Pagination } from 'antd'
+import Swal from 'sweetalert2'
 
 const WareList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,7 +17,14 @@ const WareList = () => {
 
   const {mutate} = useMutation({
     mutationFn: async (id: number) => {
-      if(confirm('Bạn có muốn xóa ?')) {
+      const result = await Swal.fire({
+        title: 'Bạn có chắc muốn xóa?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy'
+      })
+      if(result.isConfirmed) {
         await instance.delete(`/ware/${id}`)
       }
     },

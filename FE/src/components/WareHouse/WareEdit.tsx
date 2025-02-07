@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button, Form, Input, InputNumber, message } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import instance from '../../config/axios'
+import Swal from 'sweetalert2'
 
 const WareEdit = () => {
   const { id } = useParams()
@@ -24,9 +25,20 @@ const WareEdit = () => {
       return res.data
     },
     onSuccess: () => {
-      message.success("Cập nhật thành công!")
+      Swal.fire({
+        title: 'Cập nhật nguyên liệu thành công!',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });
       navigate('/ware')
     },
+    onError: () => {
+      Swal.fire({
+        title: 'Có lỗi xảy ra, vui lòng thử lại!',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    },  
   })
 
   const onSubmit = (ware: any) => {
@@ -62,7 +74,7 @@ const WareEdit = () => {
             name="countInStock"
             rules={[
               { required: true, message: 'Vui lòng nhập số lượng!' },
-              { min: 1, message: 'Số lượng phải có ít nhất 1!' },
+              // { min: 1, message: 'Số lượng phải có ít nhất 1!' },
             ]}
           >
             <InputNumber min={1} style={{ width: '100%' }} placeholder="Nhập số lượng" />
@@ -73,7 +85,7 @@ const WareEdit = () => {
             name="unit"
             rules={[
               { required: true, message: 'Vui lòng nhập đơn vị!' },
-              { min: 3, message: 'Đơn vị phải có ít nhất 3 ký tự!' },
+              { min: 1, message: 'Đơn vị phải có ít nhất 1 ký tự!' },
               { max: 255, message: 'Đơn vị không được quá 255 ký tự!' },
             ]}
           >

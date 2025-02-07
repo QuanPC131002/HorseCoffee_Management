@@ -64,7 +64,7 @@ export const getAllProducts = async (req, res) => {
 
         const total = await Product.countDocuments(); 
 
-        const data = await Product.find({}).skip(skip).limit(limit)
+        const data = await Product.find({}).sort({createdAt: -1}).skip(skip).limit(limit)
         if (!data) {
             return res.status(404).json({
               message: "No Products!",
