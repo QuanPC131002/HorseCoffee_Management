@@ -1,4 +1,4 @@
-import { faBars, faBox, faBoxes, faCartShopping, faChartSimple, faFolder, faPenToSquare, faSearch, faShop, faWarehouse } from '@fortawesome/free-solid-svg-icons'
+import { faBoxes, faCartShopping, faChartSimple, faFolder, faPenToSquare, faSearch, faWarehouse } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
@@ -123,7 +123,7 @@ const DashBoard = () => {
           )}
         <div className="p-2 text-center my-8">
           <div
-            className="w-full flex justify-center items-center p-2 border border-red-300 rounded-lg cursor-pointer bg-red-500 text-white hover:bg-white hover:text-black"
+            className="w-full flex justify-center items-center p-2 border border-red-00 rounded-lg cursor-pointer bg-red-700 text-white hover:bg-white hover:text-black"
             onClick={handleLogout}
           >
             {confirmLogout ? "Xác nhận" : "Đăng xuất"}

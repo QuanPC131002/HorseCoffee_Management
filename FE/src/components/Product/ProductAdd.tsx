@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { Button, Form, Input, InputNumber, Select, Table, message } from 'antd';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import instance from '../../config/axios';
 import { useCategories } from '../../hook/category/useCategories';
 import { useWareHouse } from '../../hook/warehouse/useWareHouse';
@@ -236,11 +236,20 @@ const ProductAdd = () => {
           <Input placeholder="Nhập giảm giá (nếu có)" />
         </Form.Item>
 
+       <div className="flex">
         <Form.Item wrapperCol={{ offset: 6, span: 14 }}>
-          <Button type="primary" htmlType="submit">
-            Lưu
-          </Button>
-        </Form.Item>
+            <Button type="primary" htmlType="submit">
+              Lưu
+            </Button>
+          </Form.Item>
+          <Form.Item wrapperCol={{ offset: 6, span: 14 }}>
+              <Link to='/products'>
+              <Button type="primary" htmlType="submit">
+                Quay Lại
+              </Button>
+              </Link>
+          </Form.Item>
+       </div>
       </Form>
     </section>
   );

@@ -1,4 +1,4 @@
-import { faCreditCard, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCreditCard, faEdit, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery } from '@tanstack/react-query';
 import { Button, Card, Col, Modal, Pagination, Row } from 'antd';
@@ -68,7 +68,7 @@ const MenuAll = () => {
   };
 
   //Modal Checkout
-  const handleOk = () => {
+  const handleOk = async () => {
 
     const orderItem = data?.products || [];
     const totalPrice = calculateTotal();
@@ -76,6 +76,7 @@ const MenuAll = () => {
     setIsOrderModal(false);
 
     createNewOrder(orderItem, totalPrice, status, notes);
+
     Swal.fire({
       title: 'Tạo đơn thành công!',
       text: 'Đơn hàng của bạn đã được tạo thành công.',
@@ -86,6 +87,8 @@ const MenuAll = () => {
         navigate('/order')
       }
     })
+
+    await mutate({action: 'clear'})
   };
 
   const handleCancel = () => {
@@ -321,9 +324,9 @@ const MenuAll = () => {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className=''>
-                  <th className="py-2 px-4 text-sm font-medium text-left">Tên</th>
+                  <th className="py-2 px-4 text-sm font-medium text-left">Tên món</th>
                   <th className="py-2 px-4 text-sm font-medium text-center">Số lượng</th>
-                  <th className="py-2 px-4 text-sm font-medium text-center">Giá</th>
+                  <th className="py-2 px-4 text-sm font-medium text-center">Đơn giá</th>
                   <th className="py-2 px-4 text-sm font-medium text-right">Thành tiền</th>
                 </tr>
               </thead>

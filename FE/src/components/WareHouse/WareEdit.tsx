@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button, Form, Input, InputNumber, message } from 'antd'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import instance from '../../config/axios'
 import Swal from 'sweetalert2'
 
@@ -92,11 +92,20 @@ const WareEdit = () => {
             <Input placeholder="Nhập đơn vị" />
           </Form.Item>
 
+        <div className="flex">
           <Form.Item wrapperCol={{ offset: 6, span: 14 }}>
-            <Button type="primary" htmlType="submit">
-              Lưu
-            </Button>
-          </Form.Item>
+              <Button type="primary" htmlType="submit">
+                Lưu
+              </Button>
+            </Form.Item>
+            <Form.Item wrapperCol={{ offset: 6, span: 14 }}>
+                <Link to='/ware'>
+                <Button type="primary" htmlType="submit">
+                  Quay Lại
+                </Button>
+                </Link>
+            </Form.Item>
+       </div>
         </Form>
       </section>
     </div>
