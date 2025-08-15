@@ -20,7 +20,7 @@ const Register = () => {
             email: '',
             password: '',
             phone: 0,
-            role: 'member', 
+            role: 'Member', 
         }
     });
     const navigate = useNavigate();
@@ -108,10 +108,10 @@ const Register = () => {
                             name="role"
                             control={control} 
                             render={({ field }) => (
-                                <Radio.Group {...field} defaultValue="member">
-                                    <Radio value="member" className='text-white'>Nhân viên</Radio>
-                                    <Radio value="cash" className='text-white'>Thu ngân</Radio>
-                                    <Radio value="admin" className='text-white'>Quản lý</Radio>
+                                <Radio.Group {...field} defaultValue="Member">
+                                    <Radio value="Member" className='text-white'>Nhân viên</Radio>
+                                    <Radio value="Cash" className='text-white'>Thu ngân</Radio>
+                                    <Radio value="Admin" className='text-white'>Quản lý</Radio>
                                 </Radio.Group>
                             )}
                         />
