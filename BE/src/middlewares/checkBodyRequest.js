@@ -1,6 +1,6 @@
-import { categoryValid } from "../validation/categoryValid";
-import { productValid } from "../validation/productValid"
-import { wareHouseValid } from "../validation/wareValid";
+import { categoryValid } from "../validation/categoryValid.js";
+import { productValid } from "../validation/productValid.js"
+import { wareHouseValid } from "../validation/wareValid.js";
 
 export const checkBodyRequestProduct = (req, res, next) => {
     try {

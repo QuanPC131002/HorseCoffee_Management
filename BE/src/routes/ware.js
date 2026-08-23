@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { createWareHouse, getAllWareHouse, getOneWareHouse, removeWareHouse, updateWareHouse } from "../controllers/ware";
-import { checkBodyRequestWareHouse } from "../middlewares/checkBodyRequest";
+import { createWareHouse, getAllWareHouse, getOneWareHouse, removeWareHouse, updateWareHouse } from "../controllers/ware.js";
+import { checkBodyRequestWareHouse } from "../middlewares/checkBodyRequest.js";
 
 const wareRouter = Router();
 wareRouter.post('/', checkBodyRequestWareHouse, createWareHouse),

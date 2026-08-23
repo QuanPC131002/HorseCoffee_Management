@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { createCategory, getAllCategory, getOneCategory, getOneCategoryByName, getOneCategoryBySlug, removeCategory, updateCategory } from "../controllers/category";
-import { checkBodyRequestCategory } from "../middlewares/checkBodyRequest";
+import { createCategory, getAllCategory, getOneCategory, getOneCategoryByName, getOneCategoryBySlug, removeCategory, updateCategory } from "../controllers/category.js";
+import { checkBodyRequestCategory } from "../middlewares/checkBodyRequest.js";
 
 const categoryRouter = Router();
 categoryRouter.post('/', checkBodyRequestCategory, createCategory)

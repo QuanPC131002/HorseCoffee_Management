@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import Product from "../models/Product"
-import Ware from "../models/Ware";
+import Product from "../models/Product.js"
+import Ware from "../models/Ware.js";
 
 export const createProduct = async (req, res) => {
     try {

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { createProduct, getAllProducts, getOneProduct, related, removeProduct, updateProduct } from "../controllers/product";
-import { checkBodyRequestProduct } from "../middlewares/checkBodyRequest";
+import { createProduct, getAllProducts, getOneProduct, related, removeProduct, updateProduct } from "../controllers/product.js";
+import { checkBodyRequestProduct } from "../middlewares/checkBodyRequest.js";
 
 const productRouter = Router()
 productRouter.post('/', checkBodyRequestProduct, createProduct)

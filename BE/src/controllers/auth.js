@@ -3,7 +3,7 @@ import crypto from "crypto";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
-import User from "../models/User";
+import User from "../models/User.js";
 dotenv.config();
 
 const { SECRET_CODE, SEND_OTP_EMAIL, SEND_OTP_EMAIL_PASSWORD } = process.env;

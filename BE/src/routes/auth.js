@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { changePassword, forgotPassword, getUserById, logout, resetPassword, signIn, signUp } from "../controllers/auth";
+import { changePassword, forgotPassword, getUserById, logout, resetPassword, signIn, signUp } from "../controllers/auth.js";
 
 const authRouter = Router ()
 authRouter.post('/signup', signUp)

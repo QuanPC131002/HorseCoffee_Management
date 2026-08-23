@@ -1,4 +1,4 @@
-import Ware from "../models/Ware";
+import Ware from "../models/Ware.js";
 
 export const createWareHouse = async (req, res) => {
     try {

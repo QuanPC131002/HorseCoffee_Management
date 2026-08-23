@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { addToCart, clearCart, decreaseItemQuantity, getCartByUserId, increaseItemQuantity, removeItemCart, updateProductQuantity } from "../controllers/cart";
-import { checkIsAdmin } from "../middlewares/checkAdmin";
+import { addToCart, clearCart, decreaseItemQuantity, getCartByUserId, increaseItemQuantity, removeItemCart, updateProductQuantity } from "../controllers/cart.js";
+import { checkIsAdmin } from "../middlewares/checkAdmin.js";
 
 const cartRouter = Router();
 cartRouter.post('/add-to-cart', addToCart),
